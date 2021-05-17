@@ -698,7 +698,7 @@ class CuerpoImagenes extends React.Component {
                     <ArrayList tipo={true} valores={this.copiaLista.listaCopia}/>
                  
                   </span>
-
+                  <div className="pup">
                   <div className="input-field">
                     <i className="material-icons prefix">assignment</i>
                     <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange} placeholder="Nombre" defaultValue={this.imgEdit.nombre}/>
@@ -720,7 +720,7 @@ class CuerpoImagenes extends React.Component {
           
                 <input type='submit' className="btn waves-effect waves-light mr-5" value='Actualizar'/>
                 <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
-             
+              </div>
               </form>
               </>
                 }

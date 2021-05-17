@@ -734,16 +734,14 @@ class CuerpoContraseña extends React.Component {
                <div  className="array"><ArrayList tipo={true} valores={this.miListaC.listaC}/></div>
           
               
-             
+               <div className="pup">
                <div className="input-field ">
                   <i className="material-icons prefix">assignment</i>
                   <input className="field" ref={this.nombre} type="text" name="nombre"id="nombre" onChange={this.handleChange} placeholder="Nombre"/>
                   {errors.nombre && <p className="warning">{errors.nombre}</p>}
                 </div>
 
-               {/* <label htmlFor="nombre">Nombre                </label>
-                <input type="text" name="nombre"id="nombre" onChange={this.handleChange}/>
-            {errors.nombre && <p className="warning">{errors.nombre}</p>}*/}
+            
 
                 <div className="input-field">
                   <i className="material-icons prefix">assignment</i>
@@ -752,51 +750,13 @@ class CuerpoContraseña extends React.Component {
                 </div>
               
 
-                 {/* <br/>
-                <label htmlFor="url">URL                   </label>
-                <input type="text" name="url"id="url" onChange={this.handleChange}/>
-                {errors.url && <p className="warning">{errors.url}</p>}*/}
+                
 
                 <div className="input-field">
                   <i className="material-icons prefix">assignment</i>
                   <input className="field" type="text" name="usuario"id="usuario" onChange={this.handleChange} placeholder="Usuario"/>
                   {errors.usuario && <p className="warning">{errors.usuario}</p>}
                 </div>
-
-                 {/*<br/>
-                <label htmlFor="usuario">Usuario               </label>
-                <input type="text" name="usuario"id="usuario" onChange={this.handleChange}/>
-                {errors.usuario && <p className="warning">{errors.usuario}</p>}*/}
-
-                {/*<br/>
-                <label className="passwdControl" htmlFor="contrasenya">                          Contraseña
-                  <label>            </label>
-                  <input type='password' name = "contrasenya"id="contrasenya" onChange={this.handleChange} value={avanzado ? this.state.contrasenya:undefined}/>
-                  <label> </label>
-                  <input type="button" className="editButton" onClick={this.togglePopup4.bind(this)}/>
-                </label>
-                <PasswordStrengthMeter password = {this.state.contrasenya}/>
-                {errors.contrasenya && <p className="warning">{errors.contrasenya}</p>}*/} 
-
-             
-                {/*<br/>
-                
-                <label htmlFor="email">Email                 </label>
-                <input type="email" name="email"id="email" onChange={this.handleChange}/>
-                {errors.email && <p className="warning">{errors.email}</p>}
-                
-                <br/>
-              
-                <label htmlFor="fecha_actual">Fecha de activación   </label>
-                <input type="date" name="fecha_actual"id="fecha_actual" value={this.state.fecha_actual} onChange={this.handleChange} readOnly/>
-                {errors.fecha_actual && <p className="warning">{errors.fecha_actual}</p>}
-
-                <br/>
-                
-                <label htmlFor="fecha_caducidad">Fecha de caducidad    </label>
-                <input type="date" name="fecha_caducidad"id="fecha_caducidad" placeholder={"DD-MM-YYYY"} onChange={this.handleChange}/>
-                
-                {errors.fecha_caducidad && <p className="warning">{errors.fecha_caducidad}</p>}*/} 
 
                 
                   <div className="input-field">
@@ -829,7 +789,7 @@ class CuerpoContraseña extends React.Component {
                 <br/>
                 <input type='submit' className="btn waves-effect waves-light mr-5" value='Enviar'/>
                 <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup.bind(this)}/>
-             
+                </div>
               </form>
              
                 </>
@@ -854,7 +814,7 @@ class CuerpoContraseña extends React.Component {
                     <div  className="array"><ArrayList tipo={true} valores={this.copiaLista.listaCopia}/></div>
           
                 
-             
+              <div className="pup">
                <div className="input-field ">
                   <i className="material-icons prefix">assignment</i>
                   <input className="field" ref={this.nombre} type="text" name="nombre"id="nombre" onChange={this.handleChange} defaultValue={this.contraEdit.nombre} placeholder="Nombre"/>
@@ -910,7 +870,7 @@ class CuerpoContraseña extends React.Component {
           
                 <input type='submit' className="btn waves-effect waves-light mr-5" value='Actualizar'/>
                 <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
-             
+                  </div>
               </form>
              
 

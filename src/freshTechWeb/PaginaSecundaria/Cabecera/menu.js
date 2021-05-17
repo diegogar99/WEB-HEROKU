@@ -81,6 +81,9 @@ export default function SimpleMenu() {
         <Link to="/paginaSecundaria/contacto" className="opt">
           <MenuItem onClick={handleClose}>Contacta con nosotros</MenuItem>
         </Link>
+        <Link to="/paginaSecundaria/" className="opt">
+          <MenuItem onClick={handleClose}>Ver contraseñas caducadas</MenuItem>
+        </Link>
         <Link to="/" className="opt">
           <MenuItem onClick={handleClose}>Cerrar sesión</MenuItem>
         </Link>

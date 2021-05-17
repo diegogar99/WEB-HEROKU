@@ -15,11 +15,11 @@ class Lista extends React.Component {
         return (
           <>
           
-          <br></br>
+          <br></br><br></br><br></br>
            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
            
-           <ul className="collection with-header">
-            <li class="collection-heade ml-4r"><h4><strong>Contraseñas caducadas</strong></h4></li>
+           <ul className="collection header with-header">
+            <li class="collection-header header ml-4r"><h4><strong>Contraseñas caducadas</strong></h4></li>
             {this.vacio ?
               <li class="collection-header"><h6>No se ha detectado ninguna fecha expirada</h6></li>
               :

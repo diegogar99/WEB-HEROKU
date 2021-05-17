@@ -194,18 +194,19 @@ class CuerpoCategorias extends React.Component {
       </div>
     :
     <>
-    {this.state.vacio ?
-      <>
-        <div className="carpetaVacia">
-          <img className="vacia" src={vacia} alt="carpetaVacia" />
-        </div>
-        <div className="textoImagen">
-          <p>No hay categorías disponibles</p>
-        </div>
-      </>
+    
+
+        <ul className="collection header col">
+        <li className="collection-header header2 ml-4">
+         <div className="contenidoList">
+            <h4 className="header2">Categorías</h4>
+            <button className="anyade" onClick={this.togglePopup.bind(this)}>Añade una!</button>
+          </div>
+        </li>
+        {this.state.vacio ? 
+         <li class="collection-item avatar"><h4>No hay categorías creadas</h4></li>
         :
-        <ul class="collection">
-        <li class="collection-header ml-4"><h4><strong>Categorías</strong></h4></li>
+        <>
         {this.state.listadoCategorias.map(data=>(
           <li key={data.nombrecat} class="collection-item avatar">
             <i class="material-icons circle blue">assignment</i>
@@ -219,14 +220,12 @@ class CuerpoCategorias extends React.Component {
             </div>
           </li>
         ))} 
+        </>
+  }
       </ul>
-      }
-    </>
+      </>
+  
     }   
-      
-
-      <button className="addButton" onClick={this.togglePopup.bind(this)}><img className="add" src={add} alt="add" /></button>
-
 
 
   

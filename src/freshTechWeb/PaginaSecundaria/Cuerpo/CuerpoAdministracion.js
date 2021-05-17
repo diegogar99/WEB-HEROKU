@@ -631,7 +631,7 @@ class CuerpoAdministracion extends React.Component {
                 <>
                 <img className="okey" src={okey} alt="okey" />
                 <form onSubmit={this.handleSubmitFin}>
-                  <input type='submit' className="Send" value='Salir'/>
+                  <input type='submit' className="btn waves-effect waves-light" value='Salir'/>
                   {this.state.redireccion && 
                   <>
                     {localStorage.removeItem('categoria')}

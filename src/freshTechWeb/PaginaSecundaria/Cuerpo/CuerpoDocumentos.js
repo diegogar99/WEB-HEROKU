@@ -44,21 +44,21 @@ function verificarFecha(fechaVerif){
   if(dia == 30 || dia == 31 || mes == 2){
 
     if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12){
-      if(dia <= 31){
+      if(dia == 31){
         valida = true;
       }
     }else if (mes == 2){
       if ((anyo % 4 == 0 && anyo % 100 != 0)||(anyo % 400 == 0)){
-        if(dia <= 29){
+        if(dia == 29){
           valida = true;
         }
       }else{
-        if(dia <= 28){
+        if(dia == 28){
           valida = true;
         }
       }
     }else if(mes == 4 || mes == 6 || mes == 9){
-      if(dia <= 30){
+      if(dia == 30){
         valida = true;
       }
     }
@@ -568,57 +568,36 @@ class CuerpoDocumentos extends React.Component {
         </div>
       </div>
       <br></br><br></br>
-       
-     {this.state.cargando ?
+      {this.state.cargando ?
      <div className="preloader">
-      <div class="preloader-wrapper big active">
-        <div class="spinner-layer spinner-blue-only">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div><div class="gap-patch">
-            <div class="circle"></div>
-          </div><div class="circle-clipper right">
-            <div class="circle"></div>
+      <div className="preloader-wrapper big active">
+        <div className="spinner-layer spinner-blue-only">
+          <div className="circle-clipper left">
+            <div className="circle"></div>
+          </div><div className="gap-patch">
+            <div className="circle"></div>
+          </div><div className="circle-clipper right">
+            <div className="circle"></div>
           </div>
         </div>
       </div>
       </div>
     :
     <>
-      {this.state.vacio ?
-      <>
-    
-        <div className="cajaFuerte">
-          <img className="caja" src={cajaFuerte} alt="cajaFuerte" />
-        </div>
-        <div className="textoImagen">
-          <p>No hay ningún contenido</p>
-          <p>Haga click en el icono + de la derecha</p>
-        </div>
-    
-      </>
+   
+  
+  
+        <ul className="collection header col">
+        <li className="collection-header header2 ml-4">
+          <div className="contenidoList">
+            <h4 className="header2">Documentos</h4>
+            <button className="anyade" onClick={this.togglePopup.bind(this)}>Añade una!</button>
+          </div>
+          </li>
+        {this.state.vacio ? 
+         <li class="collection-item avatar"><h5>No hay documentos creados</h5></li>
         :
         <>
-        {/*<div className="contenido">
-
-          {this.state.listadoDocumentos.map(data=>(
-          <pre key={data.nombre}>
-            <label htmlFor={data.nombre} className="imagenesGestion">
-              <p name={data.nombre} id={data.nombre}>{data.nombre}</p>
-              {console.log("/heroku/",data.nombre)}
-           
-              <label>  </label>
-              <input name={data.nombre} id={data.nombre} type='button' value='Editar'  onClick={this.select}/>
-              <input name={data.nombre} id={data.nombre} type='button' value='Eliminar' onClick={this.eliminar}/>
-              <input name={data.nombre} id={data.nombre} type='button' value='Descargar' onClick={this.download}/>
-              
-            </label>
-          </pre>
-          ))}   
-          </div>*/}
-  
-        <ul className="collection col">
-        <li className="collection-header ml-4"><h4><strong>Documentos</strong></h4></li>
         {this.state.listadoDocumentos.map(data=>(
           <li key={data.nombre} className="collection-item avatar">
             <i className="material-icons iconoShow circle red">picture_as_pdf</i>
@@ -626,8 +605,8 @@ class CuerpoDocumentos extends React.Component {
               
               <p id={data.nombre} className="nombreItem">{data.nombre}</p>
               
-              <p className="fechas">{data.fechacreacion}<br></br>
-                  {data.fechacaducidad}
+              <p className="fechas">creación: {data.fechacreacion}<br></br>
+                  caducidad: {data.fechacaducidad}
               </p>
               <div className="botonesEditDel">
                 <input className="btn btn-primary" name={data.nombre} id={data.nombre} type='button' value='Editar'  onClick={this.select}/>
@@ -637,28 +616,29 @@ class CuerpoDocumentos extends React.Component {
             </div>
           </li>
         ))} 
+        </>
+      }
       </ul>
           </>
-        }
-      </>
+        
+   
       }
-      
        
-        <button className="addButton" onClick={this.togglePopup.bind(this)}><img className="add" src={add} alt="add" /></button>
-        {this.state.showPopup ? 
+    {this.state.showPopup ? 
           <Popup
-            text='Selecciona las imagenes:'
+            text='Selecciona los ficheros:'
             cuerpo={
               <>
-               <form className="pup" onSubmit={this.handleSubmit}>
+               <form  onSubmit={this.handleSubmit}>
+                
                 <span className="par">
                   <input classname="form-control" type="file" name="image" accept="application/pdf" onChange={this.subirFile}/>
                   
                   <pre>      </pre>
-                  <ArrayList tipo={true} valores={this.miListaC.listaC}/>
+                  <ArrayList className="arrayL" tipo={true} valores={this.miListaC.listaC}/>
                  
                   </span>
-
+                <div className="pup">
                 <div className="input-field">
                   <i className="material-icons prefix">assignment</i>
                   <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange} placeholder="Nombre"/>
@@ -682,6 +662,7 @@ class CuerpoDocumentos extends React.Component {
                 <br/>
                 <input type='submit' className="btn btn-primary mr-2" value='Subir'/>
                 <input type='button' className="btn btn-primary" value='Cerrar' onClick={this.togglePopup.bind(this)}/>
+                </div>
               </form>
               </>
             }

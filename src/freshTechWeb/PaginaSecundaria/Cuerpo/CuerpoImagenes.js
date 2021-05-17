@@ -41,21 +41,21 @@ function verificarFecha(fechaVerif){
   if(dia == 30 || dia == 31 || mes == 2){
 
     if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12){
-      if(dia <= 31){
+      if(dia == 31){
         valida = true;
       }
     }else if (mes == 2){
       if ((anyo % 4 == 0 && anyo % 100 != 0)||(anyo % 400 == 0)){
-        if(dia <= 29){
+        if(dia == 29){
           valida = true;
         }
       }else{
-        if(dia <= 28){
+        if(dia == 28){
           valida = true;
         }
       }
     }else if(mes == 4 || mes == 6 || mes == 9){
-      if(dia <= 30){
+      if(dia == 30){
         valida = true;
       }
     }
@@ -584,8 +584,7 @@ class CuerpoImagenes extends React.Component {
         </div>
       </div>
       <br></br><br></br>
-       
-     {this.state.cargando ?
+      {this.state.cargando ?
      <div className="preloader">
       <div class="preloader-wrapper big active">
         <div class="spinner-layer spinner-blue-only">
@@ -601,39 +600,19 @@ class CuerpoImagenes extends React.Component {
       </div>
     :
     <>
-      {this.state.vacio ?
-      <>
-    
-        <div className="cajaFuerte">
-          <img className="caja" src={cajaFuerte} alt="cajaFuerte" />
-        </div>
-        <div className="textoImagen">
-          <p>No hay ningún contenido</p>
-          <p>Haga click en el icono + de la derecha</p>
-        </div>
-    
-      </>
+     
+        <ul className="collection header col">
+        <li className="collection-header header2 ml-4">
+          <div className="contenidoList">
+            <h4 className="header2">Imagenes</h4>
+            <button className="anyade" onClick={this.togglePopup.bind(this)}>Añade una!</button>
+           
+          </div>
+          </li>
+        {this.state.vacio ? 
+         <li class="collection-item avatar"><h5>No hay imagenes creadas</h5></li>
         :
         <>
-        {/*<div className="contenido">
-
-          {this.state.listadoImagenes.map(data=>(
-          <pre key={data.nombre}>
-            <label htmlFor={data.nombre} className="imagenesGestion">
-              <p name={data.nombre} id={data.nombre}>{data.nombre}</p>
-              {console.log("/heroku/",data.nombre)}
-              <img className="caja" src={ "https://fresh-techh.herokuapp.com/"+data.nombre+".jpg"} alt="cajaFuerte" />
-              <label>  </label>
-              <input name={data.nombre} id={data.nombre} type='button' value='Editar'  onClick={this.select}/>
-              <input name={data.nombre} id={data.nombre} type='button' value='Eliminar' onClick={this.eliminar}/>
-              <input name={data.nombre} id={data.nombre} type='button' value='Descargar' onClick={this.download}/>
-              
-            </label>
-          </pre>
-          ))}   
-          </div>*/}
-        <ul className="collection col">
-        <li className="collection-header ml-4"><h4><strong>Imagenes</strong></h4></li>
         {this.state.listadoImagenes.map(data=>(
           <li key={data.nombre} className="collection-item avatar">
             
@@ -642,8 +621,8 @@ class CuerpoImagenes extends React.Component {
               <img className="caja" src={ "https://fresh-techh.herokuapp.com/"+data.nombre+".jpg"} alt="cajaFuerte" />
               <pre><label>       </label></pre>
               <p id={data.nombre} className="nombreItemImg">{data.nombre}</p>
-              <p className="fechasImg">{data.fechacreacion}<br></br>
-                  {data.fechacaducidad}
+              <p className="fechasImg">creación: {data.fechacreacion}<br></br>
+                  caducidad: {data.fechacaducidad}
               </p>
               <div className="botonesEditDelImg">
                 <input className="btn btn-primary" name={data.nombre} id={data.nombre} type='button' value='Editar'  onClick={this.select}/>
@@ -653,44 +632,17 @@ class CuerpoImagenes extends React.Component {
             </div>
           </li>
         ))} 
+        </>
+    }
       </ul>
           </>
-        }
-      </>
-      }
-      
-          {/*<pre><table className="tablaImagenes">
-           <tbody>
-            <tr>
-              <td>
-                <img className="imagenesDePrueba" src={imagenes}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              <td>
-                <img className="imagenesDePrueba" src={imagenes}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              <td>
-                <img className="imagenesDePrueba" src={imagenes}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              
-            </tr>
-           </tbody>
-          </table></pre>*/}
-        <button className="addButton" onClick={this.togglePopup.bind(this)}><img className="add" src={add} alt="add" /></button>
+  }
         {this.state.showPopup ? 
           <Popup
             text='Selecciona las imagenes:'
             cuerpo={
               <>
-               <form className="pup" onSubmit={this.handleSubmit}>
+               <form onSubmit={this.handleSubmit}>
                 <span className="par">
                   <input classname="form-control" type="file" name="image" accept="image/jpeg" onChange={this.subirImagen}/>
                   
@@ -698,7 +650,7 @@ class CuerpoImagenes extends React.Component {
                   <ArrayList tipo={true} valores={this.miListaC.listaC}/>
                  
                   </span>
-
+                <div className="pup">
                 <div className="input-field">
                   <i className="material-icons prefix">assignment</i>
                   <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange} placeholder="Nombre"/>
@@ -715,30 +667,13 @@ class CuerpoImagenes extends React.Component {
                   <i className="material-icons prefix">event_busy</i>
                   <input type="date" name="expiracionImg"id="expiracionImg" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange}/>
                   {errors.expiracionImg && <p className="warning">{errors.expiracionImg}</p>}
-                </div>
-
-              
-{/*
-                <label htmlFor="nombreImg"><pre>Nombre               </pre></label>
-                  <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange}/>
-                  {errors.nombreImg && <p className="warning">{errors.nombreImg}</p>}
-
-                <br/>
-                <label htmlFor="creacionImg"><pre>Fecha de creación    </pre></label>
-                  <input type="date" name="creacionImg"id="creacionImg" value={this.state.creacionImg} onChange={this.handleChange}/>
-                  {errors.creacionImg && <p className="warning">{errors.creacionImg}</p>}
-
-                <br/>
-                <label htmlFor="expiracionImg"><pre>Fecha de expiración  </pre></label>
-                  <input type="date" name="expiracionImg"id="expiracionImg" placeholder={"DD-MM-YYYY"} onChange={this.handleChange}/>
-                  {errors.expiracionImg && <p className="warning">{errors.expiracionImg}</p>}
-
-*/}              
+                </div>   
            
                
                 <br/>
                 <input type='submit' className="btn btn-primary mr-2" value='Subir'/>
                 <input type='button' className="btn btn-primary" value='Cerrar' onClick={this.togglePopup.bind(this)}/>
+              </div>
               </form>
               </>
             }

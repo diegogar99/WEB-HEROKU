@@ -201,8 +201,14 @@ code {
 .formularioLogin{
   position: absolute;
   top:70%;
-  left:35%;
+  left:20%;
   
+}
+.formularioCode{
+  position: absolute;
+  top:70%;
+  left:15%;
+  width: 50%;
 }
 
 .inicio{
@@ -564,6 +570,7 @@ code {
 }
 .input{
   display: flex;
+  
 }
 
 .orden{
@@ -708,6 +715,7 @@ display: flex;
 
 input::placeholder{
   color: black;
+  
 }
 
 .email{
@@ -738,8 +746,9 @@ input::placeholder{
   width: 26% !important;
   
 }
+
 .input-field{
-  width: 70% !important;
+  width: 130% !important;
   margin-left: auto !important;
   margin-right: auto !important;
   margin-top: 5% !important;
@@ -829,6 +838,43 @@ input::placeholder{
   color:black;
   text-decoration: none !important;
 }
+
+.header{
+  background-color:#befb7c !important;
+}
+.anyade{
+  background-color: #da5858;
+  border-radius: 50%;
+  border: #e70707;
+  margin-left: 60%;
+  margin-top: 1%;
+  height: 60px;
+  width: 150px;
+  cursor: pointer;
+  font-family: 'Rubik', sans-serif, 800;
+  font-weight: 900;
+  font-size: 20px;
+  transition: transform .9s;
+}
+.anyade:hover{
+  transform: scale(1.1); 
+}
+.collection-item{
+  width: 150% !important;
+}
+.pup{
+  position: absolute;
+  top:70%;
+  left:15%;
+  width: 50%;
+}
+
+/*input[type=password]{
+  width: 124% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}*/
+
 /*
 
 .login::after{

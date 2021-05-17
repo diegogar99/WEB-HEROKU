@@ -242,7 +242,7 @@ class Cabecera extends React.Component {
     handleChange2 = ({target}) => {
       const{name,value} = target
       this.setState({[name]:value})
-      this.setState({errors:{},login:true,errorsCode:{}});
+      this.setState({errors:{},login:true,errorsCode:{},signin:true});
       this.validarPassword(value);
     }
     handleSubmit =e => {
@@ -374,41 +374,20 @@ class Cabecera extends React.Component {
                       </div>
                       
                       <br/>
-                      <div className="input-field col s6">
+                      <div className="input-field">
                         <i class="material-icons prefix">lock_open</i>
                         <input type='password' name = "contrasenya"id="contrasenya"onChange={this.handleChange} placeholder={"Contraseña"}/>
                         {errors.contrasenya && <p className="warning">{errors.contrasenya}</p>}
                         {!this.state.login && this.msgError()}
                       </div>
                    
-                    {/* <label htmlFor="usuario"><pre>Usuario     </pre></label>
-                      <i class="material-icons prefix">account_circle</i>
-                      <input type="email" name="usuario"id="usuario" onChange={this.handleChange}/>
-                      {errors.usuario && <p className="warning">{errors.usuario}</p>}
-                    */}
-
-
-
-{/*
-                      <br/>
-                      <label htmlFor="contrasenya"><pre>Contraseña  </pre></label>
-                      <input type='password' name = "contrasenya"id="contrasenya"onChange={this.handleChange}/>
-                      {errors.contrasenya && <p className="warning">{errors.contrasenya}</p>}
-                      {!this.state.login && <p className="warning">"No existe el usuario"</p>}
-*/}
+                   
                       <br/>
                       <br></br> <br></br>  <br></br>
                      <input class="btn waves-effect waves-light mr-5" type='submit'  value='Enviar'/>
                      <input class="btn waves-effect waves-light" type='button'  value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
 
-                     {/*this.state.redireccion && 
-                      <>
-                        {localStorage.removeItem('categoria')}
-                        {localStorage.removeItem('ordenarPor')}
-                        {localStorage.removeItem('ordenarDe')}
-                        <Redirect to="/paginaSecundaria"/>
-                      </>
-                     */}
+                    
                   
                     </div>
                     </form>
@@ -432,7 +411,7 @@ class Cabecera extends React.Component {
                         {errors.usuario && <p className="warning">{errors.usuario}</p>}
                   </div>
                   <br/>
-                  <div className="input-field col s6">
+                  <div className="input-field">
                         <i class="material-icons prefix">lock_open</i>
                         <input type="password" name = "contrasenya"id="contrasenya"onChange={this.handleChange2} value={this.state.contrasenya} placeholder={"Contraseña"}/>
                         <br></br><br></br>
@@ -441,30 +420,6 @@ class Cabecera extends React.Component {
                         {!this.state.signin && <p className="warning">"El usuario ya existe"</p>}
                         {errors.registro && <p className="warning">{errors.registro}</p>}
                   </div>
-
-
-
-                {/*<label className="user" htmlFor="usuario">Usuario</label>
-                    <label>             </label>
-                    <input type="email" name="usuario"id="usuario" onChange={this.handleChange}/>
-                    {errors.usuario && <p className="warning">{errors.usuario}</p>}
-                    <br/>
-                <br></br>*/}
-
-            {/*
-                      <label className="passwdControl" htmlFor="contrasenya">Contraseña       
-                        <label>        </label>
-                        <input type="password" name = "contrasenya"id="contrasenya"onChange={this.handleChange2} value={this.state.contrasenya}/>
-                        <label> </label>
-            <input type="button" className="editButton" onClick={this.togglePopup4.bind(this)}/>
-                      </label>
-                      <PasswordStrengthMeter password = { this.state.contrasenya}/>
-                      {errors.contrasenya && <p className="warning">{errors.contrasenya}</p>}
-                      {!this.state.signin && <p className="warning">"El usuario ya existe"</p>}
-                      {errors.registro && <p className="warning">{errors.registro}</p>}
-                    <br/>
-                    
-            */}
 
 
 
@@ -508,10 +463,12 @@ class Cabecera extends React.Component {
              cuerpo = {
                <>
                 <form onSubmit={this.handleSubmitCode}>
+                <div className="formularioCode">
                   <div className="input-field">
                     <i className="material-icons prefix circle">password</i>
                     <input ref={this.inputContra2Val} type='password' name = "code"id="code"onChange={this.handleChange} placeholder="Introduce el codigo que te hemos enviado"/>
                     {errorsCode.code && <p className="warning">{errorsCode.code}</p>}
+                  
                   </div>
                   {this.state.redireccion && 
                       <>
@@ -524,6 +481,7 @@ class Cabecera extends React.Component {
                   <br></br> <br></br>  <br></br>
                   <input class="btn waves-effect waves-light mr-5" type='submit'  value='Enviar'/>
                   <input class="btn waves-effect waves-light" type='button'  value='Cancelar' onClick={this.togglePopup5.bind(this)}/>
+                  </div>
                   </form>
                </>
 
@@ -535,47 +493,6 @@ class Cabecera extends React.Component {
             }
 
 
-             {/*{this.state.showPopup4 ? 
-              <Popup
-                text='Contraseña'
-                cuerpo = {
-                  <>
-
-                  <div className="meter1">
-                    <strong>Escribe una contraseña</strong>
-                    <br></br>
-                    <input autoComplete="off" type="password" onChange={e => this.setState({ password: e.target.value,copied:false})} />
-                    <CopyToClipboard text={password} onCopy={e => this.setState({ copied1:true})}><button className="copyTC">Copiar</button></CopyToClipboard>
-                    {copied1 ? this.mensaje(): null}
-                    <PasswordStrengthMeter password = {password}/>
-                    }
-                    <strong>Genere una contraseña a su gusto</strong>
-                    <br/>
-                  
-                    <input autoComplete="off" type="text" onChange={e => this.setState({ contrasenya_avanzado: e.target.value,copied:false})} readOnly="readonly" value={this.state.contrasenya_avanzado}/>
-                    <CopyToClipboard text={contrasenya_avanzado} onCopy={e => this.setState({ copied2:true})}><button className="copyTC">Copiar</button></CopyToClipboard>
-                    {copied2 ? this.mensaje() : null}
-                    <PasswordStrengthMeter password = {contrasenya_avanzado}/>
-                    <br/>
-                    <div className="botones">
-                      <input  id="input1" name="radio" type="radio" onChange={this.generarContrasenyaDebil}/> Numeros <br></br>
-                      <input  id="input2" name="radio" type="radio" onChange={this.generarContrasenyaMedia}/>  Numeros y letras<br></br>
-                      <input  id="input3" name="radio" type="radio" onChange={this.generarContrasenyaFuerte}/> Numeros, letras y caracteres especiales<br></br><br></br>
-                      <pre><input type="range" min="8" max="20"  defaultValue={this.state.longitud} onChange={ e => this.setLongitud(e.target) }/>   {this.state.longitud}</pre>
-                    </div>
-                  </div>
-
-                    <input type='submit' className="Send" value='Guardar' onClick={this.comprobarPasswd}/>
-                    <input type='button' className="Close" value='cancelar' onClick={this.togglePopup4.bind(this)}/>
-                    {this.state.ambasOpciones && <p className="warning">"Rellene solo una opcion"</p>}
-                  </>
-
-                }
-              
-              
-              />
-              :null
-             }*/}
             </>
           )
     }

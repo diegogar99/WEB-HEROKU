@@ -30,7 +30,7 @@ const Email = (props) => {
 		
 		{ showMessage ? <div className="alert alert-success col-md-5 mx-auto" role="alert">Email enviado correctamente!!</div> : ``}
 	
-		<form onSubmit={handleSubmit}>
+		<form className="fondoEmail"onSubmit={handleSubmit}>
 			
 			  <div className="pt-3 col-md-5 mx-auto">
 					<div className="form-group text-left"> <b>Email</b> <br/>

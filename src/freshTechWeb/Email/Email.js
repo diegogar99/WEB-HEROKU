@@ -37,11 +37,12 @@ const Email = (props) => {
 					</div>
 			  </div>
 			
+		
 			  <div className="input-field">
-					<div className="form-group text-left"> <b>Título</b> <br/>
-						<input value={contact.emailTitle} required type="text" name="emailTitle" onChange={handleChange}  placeholder="Escriba un título" />
-					</div>
-			  </div>
+                    <p>Titulo</p>
+                    <input className="fechaActual" type="text" name="emailTitle" id="emailTitle" value={contact.emailTitle} onChange={handleChange} placeholder="Escriba un título"/>
+                   
+                  </div>
 			  <div className="pt-3 col-md-5 mx-auto">
 					<div className="form-group text-left"> <b>Descripción</b> <br/>
 				

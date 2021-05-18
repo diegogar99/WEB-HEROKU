@@ -618,7 +618,7 @@ class CuerpoImagenes extends React.Component {
             
             
             <div className="contenidoList">
-              <img className="caja" src={ "https://fresh-techh.herokuapp.com/"+data.nombre+".jpg"} alt="cajaFuerte" />
+              <img className="cajaImg" src={ "https://fresh-techh.herokuapp.com/"+data.nombre+".jpg"} alt="cajaFuerte" />
               <pre><label>       </label></pre>
               <p id={data.nombre} className="nombreItemImg">{data.nombre}</p>
               <p className="fechasImg">Fecha creación: {data.fechacreacion}<br></br>
@@ -671,8 +671,8 @@ class CuerpoImagenes extends React.Component {
            
                
                 <br/>
-                <input type='submit' className="btn btn-primary botonesLogin1" value='Subir'/>
-                <input type='button' className="btn btn-primary botonesLogin2" value='Cerrar' onClick={this.togglePopup.bind(this)}/>
+                <input type='submit' className="btn waves-effect botonesLogin1 waves-light" value='Subir'/>
+                <input type='button' className="btn waves-effect botonesLogin2 waves-light" value='Cerrar' onClick={this.togglePopup.bind(this)}/>
               </div>
               </form>
               </>

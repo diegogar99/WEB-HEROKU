@@ -32,12 +32,12 @@ const Email = (props) => {
 		<form onSubmit={handleSubmit}>
 			
 			  <div className="pt-3 col-md-5 mx-auto">
-					<div className="form-group text-left"> <b>Email</b> <br/>
+					<div> <b>Email</b> <br/>
 						<input className="browser-default" id="one" required type="text" value={contact.userEmail} name="userEmail" onChange={handleChange} className="form-control" placeholder="Su email" />
 					</div>
 			  </div>
 			
-			  <div className="pt-3 col-md-5 mx-auto">
+			  <div className="input-field">
 					<div className="form-group text-left"> <b>Título</b> <br/>
 						<input value={contact.emailTitle} required type="text" name="emailTitle" onChange={handleChange}  placeholder="Escriba un título" />
 					</div>

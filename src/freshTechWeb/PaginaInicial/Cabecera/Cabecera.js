@@ -140,7 +140,7 @@ class Cabecera extends React.Component {
         if((/[!@#$%*]/.test(value.charAt(i)))){
           val3=true;
         }
-        
+         
       }
       let result =  val1 && val2 && val3;
       this.setState({registro:result},()=>console.log("resultado: ",this.state.registro, " contra: ", value));
@@ -362,7 +362,7 @@ class Cabecera extends React.Component {
             }
             {this.state.showPopup2 ? 
               <Popup
-                text='Inicia sesión'
+                text='Iniciar sesión'
                 cuerpo = {
                   <form onSubmit={this.handleSubmit}>
                     <div className="formularioLogin">
@@ -384,9 +384,10 @@ class Cabecera extends React.Component {
                    
                       <br/>
                       <br></br> <br></br>  <br></br>
-                     <input class="btn waves-effect waves-light mr-5" type='submit'  value='Enviar'/>
-                     <input class="btn waves-effect waves-light" type='button'  value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
-
+                      
+                        <input class="btn waves-effect botonesLogin1 waves-light" type='submit'  value='Enviar'/>
+                        <input class="btn waves-effect botonesLogin2 waves-light" type='button'  value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
+                      
                     
                   
                     </div>
@@ -399,7 +400,7 @@ class Cabecera extends React.Component {
             }
             {this.state.showPopup3 ? 
               <Popup
-                text='Registrate'
+                text='Registrarse'
                 cuerpo = {
                   <pre>
                   <form onSubmit={this.handleSubmitRegistro}>
@@ -423,8 +424,8 @@ class Cabecera extends React.Component {
 
 
 
-                    <input type='submit' className="btn waves-effect waves-light mr-5" value='Enviar'/>
-                    <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup3.bind(this)}/>
+                    <input type='submit' className="btn waves-effect botonesLogin1 waves-light" value='Enviar'/>
+                    <input type='button' className="btn waves-effect botonesLogin2 waves-light" value='Cerrar' onClick={this.togglePopup3.bind(this)}/>
                     {this.state.redireccion && 
                     <>
                       {localStorage.removeItem('categoria')}

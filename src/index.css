@@ -15,7 +15,7 @@ body {
 .single-mem {
   flex-shrink: 1; /*lo que se contrae un item del flex*/
   flex-basis: 24%;
-}
+} 
 
 .title {
   display: flex;
@@ -201,13 +201,19 @@ code {
 .formularioLogin{
   position: absolute;
   top:70%;
-  left:20%;
+  left:25%;
   
+}
+.botonesLogin1{
+  left:15%;
+}
+.botonesLogin2{
+  left:25%;
 }
 .formularioCode{
   position: absolute;
   top:70%;
-  left:15%;
+  left:20%;
   width: 50%;
 }
 
@@ -796,18 +802,18 @@ input::placeholder{
 
 }
 .nombreItem{
-  font-size: 30px;
-  font-weight: 900;
+  font-size: 20px;
+  font-weight: 800;
   margin-top: 1% !important;
 }
 .nombreItemImg{
-  font-size: 30px;
-  font-weight: 900;
+  font-size: 20px;
+  font-weight: 800;
   margin-top: 4.5% !important;
 }
 .fechas{
   margin-top: 0.5% !important;
-  margin-left: 25% !important;
+  margin-left: 10% !important;
 }
 .fechasImg{
   margin-top: 3% !important;
@@ -868,6 +874,7 @@ input::placeholder{
   left:15%;
   width: 50%;
 }
+
 
 /*input[type=password]{
   width: 124% !important;

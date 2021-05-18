@@ -605,8 +605,8 @@ class CuerpoDocumentos extends React.Component {
               
               <p id={data.nombre} className="nombreItem">{data.nombre}</p>
               
-              <p className="fechas">creación: {data.fechacreacion}<br></br>
-                  caducidad: {data.fechacaducidad}
+              <p className="fechas">Fecha creación: {data.fechacreacion}<br></br>
+                  Fecha caducidad: {data.fechacaducidad}
               </p>
               <div className="botonesEditDel">
                 <input className="btn btn-primary" name={data.nombre} id={data.nombre} type='button' value='Editar'  onClick={this.select}/>
@@ -660,8 +660,8 @@ class CuerpoDocumentos extends React.Component {
 
                
                 <br/>
-                <input type='submit' className="btn btn-primary mr-2" value='Subir'/>
-                <input type='button' className="btn btn-primary" value='Cerrar' onClick={this.togglePopup.bind(this)}/>
+                <input type='submit' className="btn btn-primary botonesLogin1" value='Subir'/>
+                <input type='button' className="btn btn-primary botonesLogin2" value='Cerrar' onClick={this.togglePopup.bind(this)}/>
                 </div>
               </form>
               </>
@@ -706,8 +706,8 @@ class CuerpoDocumentos extends React.Component {
                   </div>
                 <br/>
           
-                <input type='submit' className="btn waves-effect waves-light mr-5" value='Actualizar'/>
-                <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
+                <input type='submit' className="btn waves-effect waves-light botonesLogin1" value='Actualizar'/>
+                <input type='button' className="btn waves-effect waves-light botonesLogin2" value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
                 </div>
               </form>
               </>

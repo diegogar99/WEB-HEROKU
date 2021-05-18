@@ -33,19 +33,19 @@ const Email = (props) => {
 			
 			  <div className="pt-3 col-md-5 mx-auto">
 					<div className="form-group text-left"> <b>Email</b> <br/>
-						<input id="one" required type="text" value={contact.userEmail} name="userEmail" onChange={handleChange} className="form-control" placeholder="Su email" />
+						<input className="browser-default" id="one" required type="text" value={contact.userEmail} name="userEmail" onChange={handleChange} className="form-control" placeholder="Su email" />
 					</div>
 			  </div>
 			
 			  <div className="pt-3 col-md-5 mx-auto">
 					<div className="form-group text-left"> <b>Título</b> <br/>
-						<input id="one" value={contact.emailTitle} required type="text" name="emailTitle" onChange={handleChange}  className="form-control" placeholder="Escriba un título" />
+						<input className="browser-default" id="one" value={contact.emailTitle} required type="text" name="emailTitle" onChange={handleChange}  className="form-control" placeholder="Escriba un título" />
 					</div>
 			  </div>
 			  <div className="pt-3 col-md-5 mx-auto">
 					<div className="form-group text-left"> <b>Descripción</b> <br/>
 				
-						<textarea id="one" required name="emailDetails" onChange={handleChange} className="form-control" placeholder="¿Qué desea?" value={contact.emailDetails} ></textarea>
+						<textarea className="browser-default" id="one" required name="emailDetails" onChange={handleChange} className="form-control" placeholder="¿Qué desea?" value={contact.emailDetails} ></textarea>
 					</div>
 			  </div>
 			  {!props.tipo ?

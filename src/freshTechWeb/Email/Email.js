@@ -39,7 +39,7 @@ const Email = (props) => {
 			
 			  <div className="pt-3 col-md-5 mx-auto">
 					<div className="form-group text-left"> <b>Título</b> <br/>
-						<input className="inputMail" id="one" value={contact.emailTitle} required type="text" name="emailTitle" onChange={handleChange}  className="form-control" placeholder="Escriba un título" />
+						<input value={contact.emailTitle} required type="text" name="emailTitle" onChange={handleChange}  placeholder="Escriba un título" />
 					</div>
 			  </div>
 			  <div className="pt-3 col-md-5 mx-auto">

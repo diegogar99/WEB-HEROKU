@@ -875,7 +875,10 @@ input::placeholder{
   width: 50%;
 }
 
-
+.inputMail{
+  background-color: white !important;
+  color:black !important
+}
 /*input[type=password]{
   width: 124% !important;
   margin-left: auto !important;

@@ -880,9 +880,7 @@ input::placeholder{
   color:black !important;
   z-index: 200 !important;
 }
-.fondoEmail{
-  background-color: #f9eeee;
-}
+
 /*input[type=password]{
   width: 124% !important;
   margin-left: auto !important;

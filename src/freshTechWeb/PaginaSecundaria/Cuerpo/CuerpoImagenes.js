@@ -639,7 +639,7 @@ class CuerpoImagenes extends React.Component {
   }
         {this.state.showPopup ? 
           <Popup
-            text='Selecciona las imagenes:'
+            text='Añade una imagen!'
             cuerpo={
               <>
                <form onSubmit={this.handleSubmit}>

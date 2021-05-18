@@ -1,87 +1,18 @@
 import React from 'react'
 import add from '../../../imagenes/add_icon.png'
+
 import cajaFuerte from '../../../imagenes/cajaFuerte.png'
 import Popup from '../../PopUp/Popup.js'
-import ArrayList from '../../Desplegable/ArrayList.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import PasswordStrengthMeter from '../../SeguridadContrasenya/PasswordStrengthMeter';
-import contrasenyas from '../../../imagenes/contrasenyas.png'
-import ArrayListJerarquia from '../../Desplegable/ArrayListJerarquia.js'
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import ArrayList from '../../Desplegable/ArrayList.js'
+
 import axios from 'axios';
-import { createSvgIcon } from '@material-ui/core'
 import 'materialize-css/dist/css/materialize.min.css'
 
-function compararFechas(fecha1,fecha2){
-
-  var fechaAct = Number(fecha1.split("-").reverse().join("-").replace(/-/g,""));
-  var fechaCad = Number(fecha2.split("-").reverse().join("-").replace(/-/g,""));
-  
-  return fechaAct < fechaCad;
-
-}
-function verificarFecha(fechaVerif){
-
-  var valida = false;
-  var anyo = Number(fechaVerif[6] + fechaVerif[7] + fechaVerif[8] + fechaVerif[9]);
-  var dia = Number(fechaVerif[0] + fechaVerif[1]);
-  var mes = Number(fechaVerif[3] +  fechaVerif[4]);
-  
-  if(dia == 30 || dia == 31 || mes == 2){
-
-    if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12){
-      if(dia <= 31){
-        valida = true;
-      }
-    }else if (mes == 2){
-      if ((anyo % 4 == 0 && anyo % 100 != 0)||(anyo % 400 == 0)){
-        if(dia <= 29){
-          valida = true;
-        }
-      }else{
-        if(dia <= 28){
-          valida = true;
-        }
-      }
-    }else if(mes == 4 || mes == 6 || mes == 9){
-      if(dia <= 30){
-        valida = true;
-      }
-    }
-  }else{
-    valida = true;
-  }
-  return valida;
-}
-
-
-const validate = values =>{
-  const errors = {}
-
-  if (!values.fecha_actual){
-    errors.fecha_actual = 'Introduzca fecha válida'
-  }
-  if (!values.fecha_caducidad || !/[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]/.test(values.fecha_caducidad)||!compararFechas(values.fecha_actual,values.fecha_caducidad) ||!verificarFecha(values.fecha_caducidad)){
-    errors.fecha_caducidad = 'Introduzca fecha válida'
-  }
-  
-  if (!values.nombre){
-    errors.nombre = 'Introduzca nombre válido'
-  }
-  if (!values.url){
-    errors.url = 'Introduzca url válida'
-  }
-  if (!values.usuario){
-    errors.usuario = 'Introduzca usuario válido'
-  }
-  if (!values.contrasenya){
-    errors.contrasenya = 'Introduzca una contraseña'
-  }
- 
-  return errors
-
-}
-
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//FUNCIONES AUXILIARES PARA GESTIONAR FECHAS Y ERRORES
 function fecha(){
   var actual= new Date();
 
@@ -99,11 +30,72 @@ function fecha(){
     resMes = "0"+resMes;
   }
 
-  //this.setState=({fecha_actual:actual});
+
   return resDia+"-"+resMes+"-"+resAnyo;
 }
 
-class CuerpoContraseña extends React.Component {
+function verificarFecha(fechaVerif){
+
+  var valida = false;
+  var anyo = Number(fechaVerif[6] + fechaVerif[7] + fechaVerif[8] + fechaVerif[9]);
+  var dia = Number(fechaVerif[0] + fechaVerif[1]);
+  var mes = Number(fechaVerif[3] +  fechaVerif[4]);
+  
+  if(dia == 30 || dia == 31 || mes == 2){
+
+    if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12){
+      if(dia == 31){
+        valida = true;
+      }
+    }else if (mes == 2){
+      if ((anyo % 4 == 0 && anyo % 100 != 0)||(anyo % 400 == 0)){
+        if(dia == 29){
+          valida = true;
+        }
+      }else{
+        if(dia == 28){
+          valida = true;
+        }
+      }
+    }else if(mes == 4 || mes == 6 || mes == 9){
+      if(dia == 30){
+        valida = true;
+      }
+    }
+  }else{
+    valida = true;
+  }
+  return valida;
+}
+
+const validate = values =>{
+  const errors = {}
+
+  if (!values.nombreImg){
+    errors.nombreImg = 'Introduzca nombre válido'
+  }
+  if (!values.expiracionImg || !/[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]/.test(values.expiracionImg)||!compararFechas(values.creacionImg,values.expiracionImg) || !verificarFecha(values.expiracionImg)){
+    errors.expiracionImg = 'Introduzca fecha válida'
+  }
+  return errors
+}
+
+function compararFechas(fecha1,fecha2){
+
+  var fechaAct = Number(fecha1.split("-").reverse().join("-").replace(/-/g,""));
+  var fechaCad = Number(fecha2.split("-").reverse().join("-").replace(/-/g,""));
+  
+  return fechaAct < fechaCad;
+
+}
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+//CLASE CUERPODOCUMENTOS
+
+class CuerpoDocumentos extends React.Component {
 
   constructor(props){
     super(props)
@@ -111,90 +103,94 @@ class CuerpoContraseña extends React.Component {
       
       showPopup:false,
       showPopup2:false,
-      showPopup4:false,
-      fecha_actual:fecha(),
-      fecha_caducidad:'',
-      nombre:'',
-      url:'',
-      usuario:'',
-      contrasenya:'',
-      email:'',
+      showPopup5:false,
+      nombreImg:'',
       errors: {},
-      ambasOpciones:false,
-      avanzado:false,
-      password:'',
-      copied1:false,
-      copied2:false,
-      contrasenya_avanzado:'',
-      longitud:'8',
-      tipo:'',
-      categoria:localStorage.getItem('categoria'),
+      creacionImg:fecha(),
+      expiracionImg:'',
+      cargaContenido:true,
+      token: localStorage.getItem('token'),
+      listadoCategorias:[],
+      categoria:localStorage.getItem('categoria') ,
+      vacio:true,
       ordenarPor:localStorage.getItem('ordenarPor'),
       ordenarDe:localStorage.getItem('ordenarDe'),
-      token: localStorage.getItem('token'),
-      listadoContrasenyas:[],
-      cargaContenido:true,
-      listadoCategorias:[],
-      sinCategorias:false,
-      contrasenyaEdit:'',
-      vacio:true,
-      nombreAnterior:'',
       cargando:true,
-     
-      
+      listadoDocumentos:[],
+      nombreAnterior:'',
+      imgShow: '',
+      imgUrl:'',
     }
-    this.contraEdit={
+    this.imgEdit={
       nombre:'',
-      categoria:'',usuario:'',
-      contrasenya:'',url:'',
-      caducidad:'',activacion:'',
+      url:'',
+      caducidad:'',
+      activacion:'',
+      categoria:'',
 
     }
     this.copiaLista={listaCopia:[]};  
-
-    this.nombre=React.createRef();
-    this.usuario=React.createRef();
-    this.passwd=React.createRef();
-    this.dominio=React.createRef();
-    this.creacion=React.createRef();
-    this.caducidad=React.createRef();
-
-
-    
+    this.numero = 0;
+    this.subirFile=this.subirFile.bind(this);
+    this.subirFileEdit=this.subirFileEdit.bind(this);
+    this.dataFile = new FormData();
+    this.dataFileFileEdit = new FormData();
+    this.miListaV={
+      listaV:["Nombre","Fecha de creación", "Fecha de caducidad"]
+    }
   }
-  generarContrasenyaDebil =e =>{
-    this.setState({tipo:"debil"});
 
-  }
-  generarContrasenyaMedia =e =>{
-    this.setState({tipo:"media"});
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//AXIOS CONEXION CON API
+//SELECT CATEGORIAS
+  selectCategorias=async(value)=>{
+    console.log("ENTRAAA2");
 
-  }
-  generarContrasenyaFuerte =e =>{
-    this.setState({tipo:"fuerte"});
-
-  }
-  crearContrasenya=async(value)=>{
- 
-    const datos = {concreteuser:this.state.usuario,concretepasswd:this.state.contrasenya, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:localStorage.getItem('categoria')};
-    const headers = {'Authorization':`Bearer ${value}`};
-    await axios.post('https://fresh-techh.herokuapp.com/passwd',datos,{headers}
+    const config = {
+      headers: {'Authorization':`Bearer ${value}`},
+    }
+    await axios.get('https://fresh-techh.herokuapp.com/getcat',config
     )
     .then(response =>{
-      
-      this.setState({cargaContenido:true});
-      this.togglePopup();
+      console.log(response.data);
+      this.setState({listadoCategorias:response.data,cargaContenido:false});
     })
-  
+  }
+//CREO NUEVO FICHERO
+  sendFile=async(value1,value2)=>{
+    
+    const headers = {'Authorization':`Bearer ${value1}`};
+    await axios.post('https://fresh-techh.herokuapp.com/addFile',value2,{headers}
+    )
+    .then(response =>{
+      console.log(response.data);
+      this.setState({cargaContenido:true},() => this.togglePopup());
+      localStorage.removeItem('categoria');
+      console.log("ELIMINO: ", localStorage.getItem('categoria') );
+ 
+    })
   }
 
-  selectContrasenyasName=async(value)=>{
+//ELIMINO FICHERO EXISTENTE
+
+  eliminarFile=async(value1,value2)=>{
+
+    await axios.delete('https://fresh-techh.herokuapp.com/deletepasswd',{headers:{'Authorization':`Bearer ${value1}`},data:{nombre:`${value2}`}}
+    )
+    .then(response =>{
+      this.setState({cargaContenido:true});
+    })
+  }
+
+  //SELECCIONO FICHEROS PARA MOSTRARLOS
+  selectImagenes=async(value)=>{
     var lista = [];
     var indice = 0;
     var orden = '';
     var ordenarde ='';
-    console.log("Ordenar por: ",this.state.ordenarPor);
-    console.log("Ordenar de: ",this.state.ordenarDe);
+    console.log("Ordenar por I: ",this.state.ordenarPor);
     if(this.state.ordenarPor == "Nombre"){
       orden = "nombre";
     }else if(this.state.ordenarPor == "Fecha de creación"){
@@ -212,8 +208,9 @@ class CuerpoContraseña extends React.Component {
     }else{
       ordenarde = this.state.ordenarDe;
     }
-    //const query = {ordenarPor:this.state.ordenarPor,ordenarDe:this.state.ordenarDe};
-    //const headers = {'Authorization':`Bearer ${value}`};
+    console.log("Ordenar por img: ",orden);
+    console.log("Ordenar de img: ",ordenarde);
+
     const config = {
       headers: {'Authorization':`Bearer ${value}`},
       params:{ordenarPor:orden,ordenarDe:ordenarde}
@@ -225,808 +222,535 @@ class CuerpoContraseña extends React.Component {
       
       
       for(var i=0; i < response.data.length;i++){
-       if(response.data[i].tipo == "usuario-passwd"){
-         
-         lista[indice] = response.data[i];
-         indice = indice + 1;
+        if(response.data[i].tipo == "file"){
+          lista[indice] = response.data[i];
+          indice = indice + 1;
+        }
        }
-      }
-      if(lista.length == 0){
-        this.setState({vacio:true});
-      }else{
-        this.setState({vacio:false});
-      }
-      this.setState({listadoContrasenyas:lista,cargaContenido:false,cargando:false});
+       if(lista.length == 0){
+         this.setState({vacio:true});
+       }else{
+         this.setState({vacio:false});
+       }
+        this.setState({listadoDocumentos:lista,cargaContenido:false,cargando:false});
     })
-  
   }
+//GET PIC PARA VISUALIZAR FICHERO
+  showFiles=async(value1,value2)=>{
 
-  selectCategorias=async(value)=>{
-   
-    //const query = {ordenarPor:this.state.ordenarPor,ordenarDe:this.state.ordenarDe};
-    //const headers = {'Authorization':`Bearer ${value}`};
-    const config = {
-      headers: {'Authorization':`Bearer ${value}`},
-    }
-    await axios.get('https://fresh-techh.herokuapp.com/getcat',config
+    await axios.get('https://fresh-techh.herokuapp.com/getFile',{params:{nombre:`${value1}`},headers:{'Authorization':`Bearer ${value2}`}}
     )
     .then(response =>{
-  
-    
-      this.setState({listadoCategorias:response.data,cargaContenido:false});
+      console.log("IMAGEN NOMBRE: ", response.data);
+      this.descargar("https://fresh-techh.herokuapp.com/"+value1+".pdf");
+    })
+    .catch(error=>{
+      
+      console.log("error");
     })
   }
 
-  selectPasswdDetails=async(value1,value2)=>{
+//GET PIC PARA VISUALIZAR FICHERO2
+  selectFileDetails=async(value1,value2)=>{
 
-    
-    await axios.get('https://fresh-techh.herokuapp.com/detailspasswd',{params:{nombre:`${value1}`},headers:{'Authorization':`Bearer ${value2}`}}
+    await axios.get('https://fresh-techh.herokuapp.com/getFile',{params:{nombre:`${value1}`},headers:{'Authorization':`Bearer ${value2}`}}
     )
     .then(response =>{
-     
+
+      console.log("IMAGEN NOMBRE: ", response.data);
+      this.imgEdit.activacion=response.data.fechacreacion;
+      this.imgEdit.caducidad=response.data.fechacaducidad;
+      this.imgEdit.url=response.data.nombreImagen;
+      this.imgEdit.categoria=response.data.categoria;
+      this.imgEdit.nombre=value1;
+      
+      
       let array = this.state.listadoCategorias;
+      console.log("LISTADO: ",this.state.listadoCategorias);
       if(array.length > 0){
         this.miListaC.listaC = array.map((data) => data.nombrecat);
+        
       }
-      
-     
-      this.contraEdit.categoria=response.data.categoria;
-      this.contraEdit.usuario=response.data.concreteuser;
-      this.contraEdit.activacion=response.data.fechacreacion;
-      this.contraEdit.caducidad=response.data.fechacaducidad;
-      this.contraEdit.contrasenya=response.data.concretpasswd;
-      this.contraEdit.url=response.data.dominio;
-      this.contraEdit.nombre=value1;
+      console.log("ORIGINAL: ",  this.miListaC.listaC);
       var longitud = (this.miListaC.listaC.length) + 1;
       var elemento = this.miListaC.listaC[0];
       var existe = false;
       var id = 0;
-      this.setState({fecha_actual:this.contraEdit.activacion,contrasenyaEdit:this.contraEdit.contrasenya});
-
+     
       for (var i= 0; i < this.miListaC.listaC.length; i++){
         this.copiaLista.listaCopia[i] = this.miListaC.listaC[i];
         if(elemento != "sin categorias disponibles"){
-          if(this.copiaLista.listaCopia[i] == this.contraEdit.categoria){
-            
+          if(this.copiaLista.listaCopia[i] == this.imgEdit.categoria){
             existe = true;
             id = i;
           }
         }
       } 
-      
+
+        
  
         if (elemento == "sin categorias disponibles"){
-          
-          this.copiaLista.listaCopia[0] = this.contraEdit.categoria;
+          console.log("NANAI");
+          this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
  
+        }else if(elemento == null){
+          var e =  this.copiaLista.listaCopia[0];
+          if(e != "Sin categoría"){
+            this.copiaLista.listaCopia[0] = "Sin categoría";
+            this.copiaLista.listaCopia[longitud] = e;
+          }
+         
+        
         }else{
           if (existe){
-            this.copiaLista.listaCopia[0] = this.contraEdit.categoria;
+            console.log("EXISTE");
+            this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
             this.copiaLista.listaCopia[id] = elemento;
           }else{
-            this.copiaLista.listaCopia[0] = this.contraEdit.categoria;
+            console.log("NO EXISTE");
+            this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
             this.copiaLista.listaCopia[longitud] = elemento;
           }
-      
+          if((this.copiaLista.listaCopia[longitud] != "Sin categoría") && (this.copiaLista.listaCopia[0] != "Sin categoría")){
+            this.copiaLista.listaCopia[ this.copiaLista.listaCopia.length + 1] = "Sin categoría";
+          }
         }
         
+
       
-      
-      
-      this.ordenarListaC();
       this.togglePopup2();
+      
      
     })
     .catch(error=>{
-    
+      
+      console.log("error");
     })
   }
-
-  ordenarListaC(){
-    let cat = this.contraEdit.categoria;
-    let indice;
-    if(this.miListaC.listaC.length > 1){
-      for(var i = 0; i < this.miListaC.listaC.length; i++){
-        if(this.miListaC.listaC[i] == cat){
-          indice = i;
-        }
+   //DESCARGAR FICHERO
+   descargar=async(value)=>{
+    axios({
+      url: value,
+      method:"GET",
+      responseType:"arraybuffer",
+      headers: {
+        'Content-Type': 'application/pdf'
       }
-      if(indice != 0 ){
-        this.miListaC.listaC[indice] = this.miListaC.listaC[indice-1];
-        this.miListaC.listaC[indice-1] = cat;
-      }
-
-    }
-    
-  }
-
-
-  deleteContrasenya=async(value1,value2)=>{
-  
-  
-    await axios.delete('https://fresh-techh.herokuapp.com/deletepasswd',{headers:{'Authorization':`Bearer ${value2}`},data:{nombre:`${value1}`}}
-    )
-    .then(response =>{
-      //window.location.reload(true);
-      this.setState({cargaContenido:true});
     })
-    .catch(error=>{
-
+    .then(responseDownload =>{
+      const url = window.URL.createObjectURL(new Blob([responseDownload.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download",value);
+      document.body.appendChild(link);
+      link.click();
     })
-  }
-  actualizarContrasenya=async(value1,value2)=>{
-    console.log("Nombre: ", this.state.nombreAnterior);
-    console.log("Nombre: ", this.state.nombre);
-    console.log("Usuario: ", this.state.usuario);
-    console.log("Contrasenya: ", this.state.contrasenya);
-    console.log("URL: ", this.state.url);
-    console.log("Contrasenya: ", value1);
-    console.log("URL: ", this.state.fecha_caducidad);
+  .catch(error=> {
+    console.log(error.message);
+  })
 
+  }
+ //EDITAR FICHERO
+  actualizarFile=async(value1,value2)=>{
+    console.log("Token: ", value2);
+    console.log("NombreAnt: ", this.state.nombreAnterior);
+    console.log("Nombre: ", this.state.nombreImg);
+    console.log("Categoria: ", value1);
+    console.log("Caducidad: ", this.state.expiracionImg);
+    console.log("Creacion: ", this.state.creacionImg);
     
-    const datos = {nombrePassword:this.state.nombreAnterior,concreteuser:this.state.usuario,concretepasswd:this.state.contrasenyaEdit, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:value1};
+    const datos = {nuevoNombre:this.state.nombreImg, categoria:value1,fechacreacion:this.state.creacionImg,fechacaducidad:this.state.expiracionImg,nombreAntiguo:this.state.nombreAnterior,actualizaImagen:'no'};
+    console.log("DATOS: ", datos);
     const headers = {'Authorization':`Bearer ${value2}`};
-    await axios.post('https://fresh-techh.herokuapp.com/editpasswd',datos,{headers}
+    await axios.post('https://fresh-techh.herokuapp.com/editFile',datos,{headers},
     )
     .then(response =>{
-      console.log(response.data);
+      console.log("ACTUALIZO: ", response.data);
       this.setState({cargaContenido:true},() => this.togglePopup2());
       
       
     })
     .catch(error=>{
-  
+      console.log(error.response);
     })
   }
-
-
-  delete =e =>{
-    e.preventDefault();
-
-    var pass = e.currentTarget.id;
-    this.deleteContrasenya(pass,this.state.token);
+   //EDITAR FICHERO2
+  actualizFile=async(value1,value2)=>{
+    console.log("Token: ", value2);
+    console.log("NombreAnt: ", this.state.nombreAnterior);
+    console.log("Nombre: ", this.state.nombreImg);
+    console.log("Categoria: ", value1);
+    console.log("Caducidad: ", this.state.expiracionImg);
+    console.log("Creacion: ", this.state.creacionImg);
     
+    const datos = {nuevoNombre:this.state.nombreImg, categoria:value1,fechacreacion:this.state.creacionImg,fechacaducidad:this.state.expiracionImg,nombreAntiguo:this.state.nombreAnterior,actualizaImagen:'no'};
+    console.log("DATOS: ", datos);
+    const headers = {'Authorization':`Bearer ${value1}`};
+    await axios.post('https://fresh-techh.herokuapp.com/editFile',value2,{headers},
+    )
+    .then(response =>{
+      console.log("ACTUALIZO: ", response.data);
+      this.setState({cargaContenido:true},() => this.togglePopup2());
+      localStorage.removeItem('categoria');
+      console.log("ELIMINO: ", localStorage.getItem('categoria') );
+      window.location.reload();
+      
+    })
+    .catch(error=>{
+      console.log(error.response);
+    })
+  }
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+
+  //FUNCIONES QUE USAN LAS AXIOS
+  //EDITA FICHERO
+  actualizar(value){
+
+    this.dataFileFileEdit.set('nuevoNombre', this.state.nombreImg);
+    this.dataFileFileEdit.set('categoria', value);
+    this.dataFileFileEdit.set('fechacreacion', this.state.creacionImg);
+    this.dataFileFileEdit.set('fechacaducidad', this.state.expiracionImg);
+    this.dataFileFileEdit.set('nombreAntiguo', this.state.nombreAnterior);
+
+    this.actualizFile(this.state.token,this.dataFileFileEdit);
+
   }
 
-
-
+  //ELIMINA FICHERO
+  eliminar=e=>{
+    console.log("ENTRAAA3");
+    var img = e.currentTarget.id;
+    this.eliminarFile(this.state.token,img);
+  }
+  //SELECCIONA FICHERO
   select =e =>{
     e.preventDefault();
-    var pass = e.currentTarget.id;
     
-    this.selectPasswdDetails(pass,this.state.token);
+    var file = e.currentTarget.id;
+    this.selectFileDetails(file,this.state.token);
+  }
+  //DESCARGAR FICHERO
+  download =e =>{
+    e.preventDefault();
+    var nombre = e.currentTarget.id;
+    this.showFiles(nombre,this.state.token);
+    
     
   }
-
-  comprobarPasswd = (e) => {
-   
-    if ((this.state.password == '' && this.state.contrasenya_avanzado == '') || (this.state.password != '' && this.state.contrasenya_avanzado != '')){
-      this.setState({ambasOpciones:true});
-      console.log("REF1");
+  //CREA FICHERO NUEVO
+  enviarFile(e){
+    
+    console.log('nombre', this.state.nombreImg);
+    console.log('fechacaducidad', this.state.expiracionImg);
+    this.dataFile.set('nombre', this.state.nombreImg);
+    console.log("AQUIIIII12: ", localStorage.getItem('categoria'));
+    if(localStorage.getItem('categoria') == null){
+      console.log("AQUIIIII");
+      if((this.miListaC.listaC[0] != "Sin categorías") && (this.miListaC.listaC[0] != "sin categorias disponibles")){
+        this.dataFile.set('categoria', this.miListaC.listaC[0]);
+      }
+    
     }else{
-     
-      if (this.state.password != ''){
-        console.log("REF2");
-        this.setState({contrasenya:this.state.password,contrasenya_verif:this.state.password});
-      }else{
-        console.log("REF3: ",this.state.contrasenya_avanzado);
-        this.setState({contrasenya:this.state.contrasenya_avanzado,contrasenya_verif:this.state.contrasenya_avanzado,errors:{},errorsC:{}});
+      if((localStorage.getItem('categoria') != "Sin categoría") && (localStorage.getItem('categoria') != "sin categorias disponibles")){
+        this.dataFile.set('categoria', localStorage.getItem('categoria'));
       }
-      this.setState({ambasOpciones:false,avanzado:true, showPopup4: !this.state.showPopup4,
-        password:'',
-        copied1:false,
-        copied2:false,
-        contrasenya_avanzado:'',
-        longitud:'8',
-        tipo:'',contrasenyaEdit:this.state.contrasenya_avanzado});
-     
+      
     }
-  }
-
-  validarPassword =(value) =>{
-      let val1 = false,
-          val2=false,
-          val3=false;
-      for(let i = 0; i < value.length; i++) {
-        if(/[0-9]/.test(value.charAt(i))){
-          val1=true;
-        }
-        if(/[a-zA-Z]/.test(value.charAt(i))){
-          val2=true;
-        }
-        if (this.state.tipo == "fuerte"){
-          if((/[!@#$%*]/.test(value.charAt(i)))){
-            val3=true;
-          }
-        }else{
-          val3=true;
-        }
-      }
-      return val1 && val2 && val3;
-  }
-
-  buildPassword = () => {
-    let a = "",
-        d = "",
-        b = "1234567890abcdefghijklmnopqrstuvwxyz!@#$%*",
-        c = this.state.longitud,
-        valida = false;
-
-
-    if(this.state.tipo != ''){
-      while(!valida){
-        for(let ma = 0; ma < c; ma++) {
-          let n = 0;
-          if (this.state.tipo == "debil"){
-            n = Math.floor(Math.random() * 10);
-          }else if (this.state.tipo == "media"){
-            n = Math.floor(Math.random() * b.length-6);
-          }else{
-            n = Math.floor(Math.random() * b.length);
-          }
-          d = b.charAt(n);
-          a = a + d;
-        }
-        if(this.state.tipo == "media" || this.state.tipo == "fuerte"){
-          valida=this.validarPassword(a);
-          if (!valida){
-            a="";
-          }
-          
-        }else{
-          valida = true;
-        }
-      }
-      this.setState({contrasenya_avanzado:a});
-    }
-  }
-
-  setLongitud = ({ value }) => {
-    this.setState({longitud:value}, () => { this.buildPassword();});
+    this.dataFile.set('fechacreacion', this.state.creacionImg);
+    this.dataFile.set('fechacaducidad', this.state.expiracionImg);
    
+    this.sendFile(this.state.token,this.dataFile);
+
   }
-  mensaje(){
-    
-    return <span style={{color: 'red'}}>Copiado</span>
-    
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  //FICHEROS
+  //SUBIR FICHERO AL CREAR NUEVO
+  subirFile(e){
+    let img = e.target.files[0];
+    console.log("imagen: ",img);
+
+    if (img) {
+
+      this.dataFile.set('file', img);
+      
+    }else{
+      alert("Selecciona una imagen")
+    }
   }
-  
+
+  //SUBIR FICHERO AL EDITAR 
+
+  subirFileEdit(e){
+    let img = e.target.files[0];
+    console.log("imagen: ",img);
+
+    if (img) {
+
+      this.dataFileFileEdit.set('file', img);
+      this.dataFileFileEdit.set('actualizaImagen', 'si');
+
+    }else{
+      this.dataFileFileEdit.set('actualizaImagen', 'no');
+      alert("Selecciona una imagen")
+    }
+  }
+ 
+
+
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  //POPUPS
+
   togglePopup() {
     this.setState({
-      showPopup: !this.state.showPopup,
-      errors: {},
-      fecha_caducidad:'',
-      nombre:'',
-      url:'',
-      usuario:'',
-      contrasenya:'',
-      email:'',
-      fecha_actual:fecha(),
-      isFectch: true,
-      ambasOpciones:false,
-      avanzado:false,
-      password:'',
-      copied1:false,
-      copied2:false,
-      contrasenya_avanzado:'',
-      longitud:'8',
-      tipo:'',
+      showPopup: !this.state.showPopup
     });
-
-
-
     let array = this.state.listadoCategorias;
     if(array.length > 0){
       this.miListaC.listaC = array.map((data) => data.nombrecat);
+      this.miListaC.listaC[this.miListaC.listaC.length + 1] = "Sin categoría"
     }
-  
-  
-  }
 
+  }
   togglePopup2() {
     this.setState({
       showPopup2: !this.state.showPopup2,
-      errors: {},
-      fecha_caducidad:this.contraEdit.caducidad,
-      nombre:this.contraEdit.nombre,
-      url:this.contraEdit.url,
-      usuario:this.contraEdit.usuario,
-      contrasenya:this.contraEdit.contrasenya,
-      email:'',
-      fecha_actual:fecha(),
-      isFectch: true,
-      ambasOpciones:false,
-      avanzado:false,
-      password:'',
-      copied1:false,
-      copied2:false,
-      contrasenya_avanzado:'',
-      longitud:'8',
-      tipo:'',
-      nombreAnterior:this.contraEdit.nombre,
-      errorsC:{},
-    });
-    console.log("ANTES: ", this.contraEdit.nombre);
-    
-    
-
-
-    
-  }
-
-  
-  togglePopup4() {
-    this.setState({
-      showPopup4: !this.state.showPopup4,
       errors:{},
-      errorsC:{},
-    
-    });
-  }
-
-  miListaV={
-    listaV:["Nombre","Fecha de creación", "Fecha de caducidad"]
-  }
-  miListaC={
-    listaC:["sin categorias disponibles"]
-  }
-
+      nombreAnterior:this.imgEdit.nombre,
+      expiracionImg:this.imgEdit.caducidad,
+      nombreImg:this.imgEdit.nombre,
   
+    });
+
+  }
+  togglePopup5() {
+    this.setState({
+      showPopup5: !this.state.showPopup5,
+    });
+    
+  }
 
 
+
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+
+  //HANDLE CHANGE
   handleChange = ({target}) => {
     const{name,value} = target
     this.setState({[name]:value})
-
+   
   }
-
-
+  //FORMULARIOS SUBMIT
   handleSubmit =e => {
     e.preventDefault()
-    //Así separo errors del resto de estado
     const {errors, ...sinErrors} = this.state
     const result = validate(sinErrors)
-    
-    
     this.setState({errors:result})
   
     if(!Object.keys(result).length){ //Si tiene propiedades, hay error
       //Envio formulario
-      const userToken = localStorage.getItem('token');
-      this.crearContrasenya(userToken);
-
+      console.log('Formulario válido')
+      this.enviarFile();
     }else{
 
       console.log('Formulario inválido')
     }
-
   }
-
   handleSubmitEdit =e => {
     e.preventDefault()    
 
     var cat = localStorage.getItem('categoria');
-   
-    this.actualizarContrasenya(cat,this.state.token);
-    
-
+    this.actualizar(cat);
   }
 
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
 
-  
-
-  
-
-
+  //LISTA CATEGORIAS
+  miListaC={
+    listaC:["sin categorias disponibles"]
+   }
+   
   render () {
-    const { errors,copied2,contrasenya_avanzado,avanzado,token,cargaContenido} = this.state
-    {cargaContenido && this.selectContrasenyasName(token)}
+    const { errors,token,cargaContenido} = this.state
+    {cargaContenido && this.selectImagenes(token)}
     {cargaContenido && this.selectCategorias(token)}
-    
-    
+
     return (
-      <>
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
-      
-      <div className="Filtro">
+        <>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
+       
+        <div className="Filtro">
         <br></br><br></br>
         <div className="bloqueArray">
-          {/*<div className="filtro3">
-          <ArrayListJerarquia />
-          </div>*/}
+
           <div className="filtro">
-            <ArrayList tipo={false} valores={this.miListaV.listaV} contenido={"contrasenya"}/>
+            <ArrayList tipo={false} valores={this.miListaV.listaV} contenido={"imagenes"}/>
           </div>
-        </div> 
+        </div>
       </div>
       <br></br><br></br>
-    {this.state.cargando ?
+      {this.state.cargando ?
      <div className="preloader">
-      <div class="preloader-wrapper big active">
-        <div class="spinner-layer spinner-blue-only">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div><div class="gap-patch">
-            <div class="circle"></div>
-          </div><div class="circle-clipper right">
-            <div class="circle"></div>
+      <div className="preloader-wrapper big active">
+        <div className="spinner-layer spinner-blue-only">
+          <div className="circle-clipper left">
+            <div className="circle"></div>
+          </div><div className="gap-patch">
+            <div className="circle"></div>
+          </div><div className="circle-clipper right">
+            <div className="circle"></div>
           </div>
         </div>
       </div>
       </div>
     :
     <>
-     
-     
+   
+  
+  
         <ul className="collection header col">
         <li className="collection-header header2 ml-4">
           <div className="contenidoList">
-            <h4 className="header2">Contraseñas</h4>
+            <h4 className="header2">Documentos</h4>
             <button className="anyade" onClick={this.togglePopup.bind(this)}>Añade una!</button>
           </div>
-        </li>
+          </li>
         {this.state.vacio ? 
-         <li class="collection-item avatar"><h4>No hay contraseñas creadas</h4></li>
+         <li class="collection-item avatar"><h5>No hay documentos creados</h5></li>
         :
         <>
-          {this.state.listadoContrasenyas.map(data=>(
+        {this.state.listadoDocumentos.map(data=>(
           <li key={data.nombre} className="collection-item avatar">
-            <i className="material-icons iconoShow circle green">lock</i>
+            <i className="material-icons iconoShow circle red">picture_as_pdf</i>
             <div className="contenidoList">
               
               <p id={data.nombre} className="nombreItem">{data.nombre}</p>
               
-              <p className="fechas">creación: {data.fechacreacion}<br></br>
-                  caducidad: {data.fechacaducidad}
+              <p className="fechas">Fecha creación: {data.fechacreacion}<br></br>
+                  Fecha caducidad: {data.fechacaducidad}
               </p>
               <div className="botonesEditDel">
                 <input className="btn btn-primary" name={data.nombre} id={data.nombre} type='button' value='Editar'  onClick={this.select}/>
-                <input className="btn btn-primary ml-2" name={data.nombre} id={data.nombre} type='button' value='Eliminar' onClick={this.delete}/>
+                <input className="btn btn-primary ml-2" name={data.nombre} id={data.nombre} type='button' value='Eliminar' onClick={this.eliminar}/>
+                <input className="btn btn-primary ml-2" name={data.nombre} id={data.nombre} type='button' value='Descargar' onClick={this.download}/>
               </div>
             </div>
           </li>
         ))} 
-
-      </>
+        </>
       }
       </ul>
-          
+          </>
         
-    </>
-  }
-      
-        {/*<pre><table className="tablaContrasenya">
-           <tbody>
-            <tr>
-              <td>
-                <img className="contrasenyasDePrueba" src={contrasenyas}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              <td>
-                <img className="contrasenyasDePrueba" src={contrasenyas}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              <td>
-                <img className="contrasenyasDePrueba" src={contrasenyas}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              
-            </tr>
-           </tbody>
-    </table></pre>*/}
-
-      
-
-      
-      {this.state.showPopup ? 
+   
+      }
+       
+    {this.state.showPopup ? 
           <Popup
-            text='Usuario-contraseña:'
+            text='Añade un documento!'
             cuerpo={
               <>
+               <form  onSubmit={this.handleSubmit}>
+                
+                <span className="par">
+                  <input classname="form-control" type="file" name="image" accept="application/pdf" onChange={this.subirFile}/>
+                  
+                  <pre>      </pre>
+                  <ArrayList className="arrayL" tipo={true} valores={this.miListaC.listaC}/>
+                 
+                  </span>
+                <div className="pup">
+                <div className="input-field">
+                  <i className="material-icons prefix">assignment</i>
+                  <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange} placeholder="Nombre"/>
+                  {errors.nombreImg && <p className="warning">{errors.nombreImg}</p>}
+                </div>
              
-              <form onSubmit={this.handleSubmit}>
-               <div  className="array"><ArrayList tipo={true} valores={this.miListaC.listaC}/></div>
-          
-              
-               <div className="pup">
-               <div className="input-field ">
-                  <i className="material-icons prefix">assignment</i>
-                  <input className="field" ref={this.nombre} type="text" name="nombre"id="nombre" onChange={this.handleChange} placeholder="Nombre"/>
-                  {errors.nombre && <p className="warning">{errors.nombre}</p>}
+                <div className="input-field">
+                  <i className="material-icons prefix">event_available</i>
+                  <input className="fechaActual" type="date" name="creacionImg"id="creacionImg" value={"Fecha de creacion: " +this.state.creacionImg} readonly="readonly"/>
+                  {errors.creacionImg && <p className="warning">{errors.creacionImg}</p>}
                 </div>
-
-            
 
                 <div className="input-field">
-                  <i className="material-icons prefix">assignment</i>
-                  <input className="field" type="text" name="url"id="url" onChange={this.handleChange} placeholder="URL"/>
-                  {errors.url && <p className="warning">{errors.url}</p>}
-                </div>
-              
-
-                
-
-                <div className="input-field">
-                  <i className="material-icons prefix">assignment</i>
-                  <input className="field" type="text" name="usuario"id="usuario" onChange={this.handleChange} placeholder="Usuario"/>
-                  {errors.usuario && <p className="warning">{errors.usuario}</p>}
+                  <i className="material-icons prefix">event_busy</i>
+                  <input type="date" name="expiracionImg"id="expiracionImg" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange}/>
+                  {errors.expiracionImg && <p className="warning">{errors.expiracionImg}</p>}
                 </div>
 
-                
-                  <div className="input-field">
-                    <i className="material-icons icon prefix">send</i>
-                    
-                    <input className="field2" type="date" name="fecha_actual"id="fecha_actual" value={"Fecha creación: " + this.state.fecha_actual} onChange={this.handleChange} readonly="readonly"/>
-                    {errors.fecha_actual && <p className="warning">{errors.fecha_actual}</p>}
-                  </div>
 
-                  <div className="input-field">
-                    <i className="material-icons prefix">assignment</i>
-                    <input className="field2" type="date" name="fecha_caducidad"id="fecha_caducidad" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange}/>
-                    {errors.fecha_caducidad && <p className="warning">{errors.fecha_caducidad}</p>}
-                  </div>
-                  <div className="input-field">
-                        
-                    <i className="material-icons prefix">lock</i>
-                    <input className="field" type='password' name = "contrasenya"id="contrasenya" onChange={this.handleChange} value={avanzado ? this.state.contrasenya:undefined}/>
-                              
-                    <button className="btn-floating blue prefix" onClick={this.togglePopup4.bind(this)}>
-                    <i className="material-icons circle">edit</i>
-                    </button>
-                                
-                    <PasswordStrengthMeter password = {this.state.contrasenya}/>
-                    {errors.contrasenya && <p className="warning">{errors.contrasenya}</p>}
-                  </div>
                
-
-
                 <br/>
-                <input type='submit' className="btn waves-effect waves-light mr-5" value='Enviar'/>
-                <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup.bind(this)}/>
+                <input type='submit' className="btn btn-primary mr-2" value='Subir'/>
+                <input type='button' className="btn btn-primary" value='Cerrar' onClick={this.togglePopup.bind(this)}/>
                 </div>
               </form>
-             
-                </>
+              </>
             }
-           
-
             eliminada={false}
           />
           : null
         }
-      
 
 
 
-          {this.state.showPopup2 ? 
+        {this.state.showPopup2 ? 
               <Popup
-                text='Edita la contraseña'
+                text='Edita el documento'
                 cuerpo={
                   <>
-
-                  <form onSubmit={this.handleSubmitEdit}>
-                    <div  className="array"><ArrayList tipo={true} valores={this.copiaLista.listaCopia}/></div>
-          
-                
-              <div className="pup">
-               <div className="input-field ">
-                  <i className="material-icons prefix">assignment</i>
-                  <input className="field" ref={this.nombre} type="text" name="nombre"id="nombre" onChange={this.handleChange} defaultValue={this.contraEdit.nombre} placeholder="Nombre"/>
-                  {errors.nombre && <p className="warning">{errors.nombre}</p>}
-                </div>
-
-             
-
-                <div className="input-field">
-                  <i className="material-icons prefix">assignment</i>
-                  <input className="field" ref={this.dominio} type="text" name="url"id="url" onChange={this.handleChange} defaultValue={this.contraEdit.url} placeholder="URL"/>
-                  {errors.url && <p className="warning">{errors.url}</p>}
-                </div>
-              
-
-              
-
-                <div className="input-field">
-                  <i className="material-icons prefix">assignment</i>
-                  <input className="field" ref={this.usuario} type="text" name="usuario"id="usuario" onChange={this.handleChange} defaultValue={this.contraEdit.usuario} placeholder="Usuario"/>
-                  {errors.usuario && <p className="warning">{errors.usuario}</p>}
-                </div>
-
-                
-                  <div className="input-field">
-                    <i className="material-icons icon prefix">send</i>
-              
-                    <input className="field2" ref={this.creacion} type="date" name="fecha_actual"id="fecha_actual" value={"Fecha creación: " + this.state.fecha_actual} onChange={this.handleChange} readonly="readonly"/>
-                    {errors.fecha_actual && <p className="warning">{errors.fecha_actual}</p>}
-                  </div>
-
+                <form onSubmit={this.handleSubmitEdit}>
+                  <span className="par">
+                   <input classname="form-control" type="file" name="image" accept="application/pdf" onChange={this.subirFileEdit}/>
+                  
+                    <pre>      </pre>
+                    <ArrayList tipo={true} valores={this.copiaLista.listaCopia}/>
+                 
+                  </span>
+                  <div className="pup">
                   <div className="input-field">
                     <i className="material-icons prefix">assignment</i>
-                  
-                    <input className="field2" ref={this.caducidad} type="date" name="fecha_caducidad"id="fecha_caducidad" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange} defaultValue={this.contraEdit.caducidad}/>
-                    {errors.fecha_caducidad && <p className="warning">{errors.fecha_caducidad}</p>}
+                    <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange} placeholder="Nombre" defaultValue={this.imgEdit.nombre}/>
+                    {errors.nombreImg && <p className="warning">{errors.nombreImg}</p>}
                   </div>
+             
                   <div className="input-field">
-                        
-                    <i className="material-icons prefix">lock</i>
-                    <input ref={this.passwd} className="field" type='text' name = "contrasenyaEdit"id="contrasenyaEdit" onChange={this.handleChange} value={avanzado ? this.state.contrasenyaEdit:undefined}  defaultValue={this.contraEdit.contrasenya}/>  
-                    <button type="button" className="btn-floating blue prefix" onClick={this.togglePopup4.bind(this)}>
-                      <i className="material-icons circle">edit</i>
-                    </button>
-                              
-                    <PasswordStrengthMeter password = {this.state.contrasenyaEdit}/>
-                    {errors.contrasenyaEdit && <p className="warning">{errors.contrasenyaEdit}</p>}
+                    <i className="material-icons prefix">event_available</i>
+                    <input className="fechaActual" type="date" name="creacionImg"id="creacionImg" value={"Fecha de creacion: " +this.state.creacionImg} onChange={this.handleChange} readonly="readonly"/>
+                    {errors.creacionImg && <p className="warning">{errors.creacionImg}</p>}
                   </div>
-               
 
-
+                  <div className="input-field">
+                    <i className="material-icons prefix">event_busy</i>
+                    <input type="date" name="expiracionImg"id="expiracionImg" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange} defaultValue={this.imgEdit.caducidad}/>
+                    {errors.expiracionImg && <p className="warning">{errors.expiracionImg}</p>}
+                  </div>
                 <br/>
           
                 <input type='submit' className="btn waves-effect waves-light mr-5" value='Actualizar'/>
                 <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
-                  </div>
+                </div>
               </form>
-             
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* 
-
-
-
-                  <pre>
-                  <form onSubmit={this.handleSubmitEdit}>
-                   
-                   <div  className="array"><ArrayList tipo={true} valores={this.copiaLista.listaCopia}/></div>
-              
-                   <br></br>
-
-               
-             
-                  <label htmlFor="nombre">Nombre                </label>
-                    <input ref={this.nombre} type="text" name="nombre"id="nombre" onChange={this.handleChange} defaultValue={this.contraEdit.nombre}/>
-                {errors.nombre && <p className="warning">{errors.nombre}</p>}
-    
-                    <br/>
-                    <label htmlFor="url">URL                   </label>
-                    <input ref={this.dominio} type="text" name="url"id="url" onChange={this.handleChange} defaultValue={this.contraEdit.url}/>
-                    {errors.url && <p className="warning">{errors.url}</p>}
-    
-                    <br/>
-                    <label htmlFor="usuario">Usuario               </label>
-                    <input ref={this.usuario} type="text" name="usuario"id="usuario" onChange={this.handleChange} defaultValue={this.contraEdit.usuario}/>
-                    {errors.usuario && <p className="warning">{errors.usuario}</p>}
-    
-                    <br/>
-                    <label className="passwdControl" htmlFor="contrasenyaEdit">                          Contraseña
-                      <label>            </label>
-                      <input ref={this.passwd} type='text' name = "contrasenyaEdit"id="contrasenyaEdit" onChange={this.handleChange} value={avanzado ? this.state.contrasenya:undefined}  defaultValue={this.contraEdit.contrasenya}/>
-                      <label> </label>
-                      <input type="button" className="editButton" onClick={this.togglePopup4.bind(this)}/>
-                    </label>
-                  
-                    <PasswordStrengthMeter password = {this.state.contrasenyaEdit}/>
-                    {errors.contrasenyaEdit && <p className="warning">{errors.contrasenyaEdit}</p>}
-
-                    <br/>
-                  
-                    <label htmlFor="fecha_actual">Fecha de activación   </label>
-                    <input ref={this.creacion} type="date" name="fecha_actual"id="fecha_actual" value={this.state.fecha_actual} onChange={this.handleChange} readOnly/>
-                    {errors.fecha_actual && <p className="warning">{errors.fecha_actual}</p>}
-    
-                    <br/>
-                    
-                    <label htmlFor="fecha_caducidad">Fecha de caducidad    </label>
-                    <input ref={this.caducidad} type="date" name="fecha_caducidad"id="fecha_caducidad" placeholder={"DD-MM-YYYY"} onChange={this.handleChange} defaultValue={this.contraEdit.caducidad}/>
-                    
-                    {errors.fecha_caducidad && <p className="warning">{errors.fecha_caducidad}</p>}
-    
-                    <br/>
-                    <input type='submit' className="Send" value='Actualizar'/>
-                    <input type='button' className="Close" value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
-    
-                  </form>
-                  </pre>*/}
-                    </>
+              </>
                 }
               />
               :null
         }
-          {this.state.showPopup4 ? 
-              <Popup
-                text='Genere una contraseña'
-                cuerpo = {
-                  <>
 
-                  <div className="meter1">
-                    {/*<strong>Escribe una contraseña</strong>
-                    <br></br>
-                    <input autoComplete="off" type="password" onChange={e => this.setState({ password: e.target.value,copied:false})} />
-                    <CopyToClipboard text={password} onCopy={e => this.setState({ copied1:true})}><button className="copyTC">Copiar</button></CopyToClipboard>
-                    {copied1 ? this.mensaje(): null}
-                    <PasswordStrengthMeter password = {password}/>*/}
-                    
-                    <br/>
-                  
-                    <input className="browser-default" autoComplete="off" type="text" onChange={e => this.setState({ contrasenya_avanzado: e.target.value,copied:false})} readOnly="readonly" value={this.state.contrasenya_avanzado}/>
-                    <CopyToClipboard text={contrasenya_avanzado} onCopy={e => this.setState({ copied2:true})}><button className="copyTC">Copiar</button></CopyToClipboard>
-                    {copied2 ? this.mensaje() : null}
-                    <br/>
-                    <div className="botones">
-                      <label>
-                        <input  className="with-gap" id="input1" name="radio" type="radio"  onChange={this.generarContrasenyaDebil}/>
-                        <span className="checkFont">Numeros</span> 
-                      </label>
-                      <br></br>
-                      <label>
-                        <input  className="with-gap" id="input2" name="radio" type="radio" onChange={this.generarContrasenyaMedia}/>
-                        <span className="checkFont">Numeros y letras</span>
-                      </label>
-                      <br></br>
-                      <label>
-                        <input  className="with-gap" id="input3" name="radio" type="radio" onChange={this.generarContrasenyaFuerte}/>
-                        <span className="checkFont">Numeros, letras y caracteres especiales</span>
-                      </label>
-                      <br></br>
-                      <pre><input className="range" type="range" min="8" max="20"  defaultValue={this.state.longitud} onChange={ e => this.setLongitud(e.target) }/>   {this.state.longitud}</pre>
-                    </div>
-                  </div>
-
-                    <input type='submit' className="btn waves-effect waves-light mr-5" value='Guardar' onClick={this.comprobarPasswd}/>
-                    <input type='button' className="btn waves-effect waves-light" value='cancelar' onClick={this.togglePopup4.bind(this)}/>
-                    {this.state.ambasOpciones && <p className="warning">"Rellene solo una opcion"</p>}
-                  </>
-
-                }
-              
-              
-              />
-              :null
-        }
-
-
-    </>
+     
+      </>
     )
   }
 }
 
-export default CuerpoContraseña
+export default CuerpoDocumentos
+

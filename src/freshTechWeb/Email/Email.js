@@ -14,7 +14,7 @@ const Email = (props) => {
    const handleSubmit = e =>{
 	    e.preventDefault();
 	   console.log(contact.userEmail);
-		emailjs.send('service_whqrweu','template_u1jqbkc', contact, 'user_IYHDpBrT6aoBW2dXblVJA')
+	   emailjs.send('service_7rxj0y9','template_a21tng6', contact, 'user_wAL9M7ycdftxE5fepZep7')
 		.then((response) => {
 				   console.log('SUCCESS!', response.status, response.text);
 				   setContact(frmContact);
@@ -39,7 +39,7 @@ const Email = (props) => {
 			
 			  <div className="pt-3 col-md-5 mx-auto">
 					<div className="form-group text-left"> <b>Título</b> <br/>
-						<input className="browser-default" id="one" value={contact.emailTitle} required type="text" name="emailTitle" onChange={handleChange}  className="form-control" placeholder="Escriba un título" />
+						<input className="default-browser" id="one" value={contact.emailTitle} required type="text" name="emailTitle" onChange={handleChange}  className="form-control" placeholder="Escriba un título" />
 					</div>
 			  </div>
 			  <div className="pt-3 col-md-5 mx-auto">

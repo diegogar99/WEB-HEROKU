@@ -10,11 +10,12 @@ const Email = (props) => {
    const handleChange = e => { 
 		const {name,value} = e.target;
 		setContact({...contact,[name]:value}); 
+		
    };
    const handleSubmit = e =>{
 	    e.preventDefault();
 	   console.log(contact.userEmail);
-	   emailjs.send('service_7rxj0y9','template_8mjw7qg', contact, 'user_wAL9M7ycdftxE5fepZep7')
+		emailjs.send('service_7rxj0y9','template_8mjw7qg', contact, 'user_wAL9M7ycdftxE5fepZep7')
 		.then((response) => {
 				   console.log('SUCCESS!', response.status, response.text);
 				   setContact(frmContact);

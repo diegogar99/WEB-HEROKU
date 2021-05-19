@@ -300,7 +300,7 @@ class CuerpoCategorias extends React.Component {
                       {errors.categoria && <p className="warning">{errors.categoria}</p>}
                     </div>
                 <br/>
-                <input type='submit' class="btn waves-effect waves-light mr-5" value='Actualizar'/>
+                <input type='submit' class="btn waves-effect waves-light ml-5" value='Actualizar'/>
                 <input type='button' class="btn waves-effect waves-light" value='Cancelar' onClick={this.togglePopup2.bind(this)}/>
               </form>
                

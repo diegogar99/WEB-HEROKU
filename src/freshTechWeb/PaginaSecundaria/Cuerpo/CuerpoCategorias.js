@@ -7,6 +7,7 @@ import Popup from '../../PopUp/Popup.js'
 import axios from 'axios';
 import 'materialize-css/dist/css/materialize.min.css'
 
+
 const validate = values =>{
   const errors = {}
 
@@ -32,6 +33,7 @@ class CuerpoCategorias extends React.Component {
       cargando:true,
    
     }
+      
     this.catEdit={nombre:''};
     
   }
@@ -176,7 +178,8 @@ class CuerpoCategorias extends React.Component {
       <>
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
       
-
+  
+     
       <br></br><br></br>     
       {this.state.cargando ?
      <div className="preloader">

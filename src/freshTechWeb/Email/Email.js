@@ -31,7 +31,7 @@ const Email = (props) => {
 		{ showMessage ? <div className="alert alert-success col-md-5 mx-auto" role="alert">Email enviado correctamente!!</div> : ``}
 	
 		<form className="fondoEmail"onSubmit={handleSubmit}>
-			
+			<br></br>
 			  <div className="pt-3 col-md-5 mx-auto">
 					<div className="form-group text-left"> <b>Email</b> <br/>
 						<input required type="text" value={contact.userEmail} name="userEmail" onChange={handleChange} className="form-control" placeholder="Su email" />
@@ -55,7 +55,7 @@ const Email = (props) => {
             <button className="btn btn-primary" onClick={props.close}>Salir</button>        
 			  	</div></pre>
           :
-          <div className="pt-3 col-md-5 mx-auto text-left">
+          <div className="pt-3 col-md-5 mx-auto text-center">
 					  <button className="btn btn-primary">Enviar</button>
           </div>
 				}

@@ -118,6 +118,7 @@ class CuerpoSeguridad extends React.Component {
     return (
       <>
       <div className="browser-default">
+        <h4 className="tituloSeguridad text-center">Prueba la seguridad tus contraseñas!</h4>
       <div className="passwdMeter">
           <br/>
           <strong className="browser-default">Introduzca una contraseña a validar</strong>

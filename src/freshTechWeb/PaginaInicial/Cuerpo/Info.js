@@ -41,26 +41,26 @@ class Info extends React.Component {
 
       <div className="inicio">
         <img className="imagenLogos" src={img5} />   
-        <h5>Genere contraseñas seguras</h5>
-        <p className="parrafo1"> El generador de contraseñas integrado le permite crear largas contraseñas aleatorias</p>
+        <h5>Genera contraseñas seguras</h5>
+        <p className="parrafo1"> El generador de contraseñas integrado te permite crear largas contraseñas aleatorias</p>
       </div>
       
       <div className="inicio2">
         <img className="imagenLogos" src={img6} /> 
-        <h5>Protéjase contra hackeos</h5>
-        <p className="parrafo1">Deje de preocuparse por los robos de datos y protéjase contra los hackeos</p>
+        <h5>Protégete contra hackeos</h5>
+        <p className="parrafo1">Deja de preocuparte por los robos de datos y protégete contra los hackeos</p>
       </div>
 
       <div className="inicio3">
         <img className="imagenLogos" src={img8} /> 
-        <h5>Almacene documentos importantes</h5>
-        <p className="parrafo1">Mantenga sus imágenes y documentos a buen recaudo para que le resulte sencillo encontrarlos</p>
+        <h5>Almacena documentos importantes</h5>
+        <p className="parrafo1">Manten tus imágenes y documentos a buen recaudo para que te resulte sencillo encontrarlos</p>
       </div>
 
       <div className="inicio4">
         <img className="imagenLogos" src={img7} /> 
         <h5>Accede desde donde quiera</h5>
-        <p className="parrafo1">Accede a FreshTech desde cualquier lugar en su navegador web de confianza o en su dispositivo Android</p>
+        <p className="parrafo1">Accede a FreshTech desde cualquier lugar en tu navegador web de confianza o en tu dispositivo Android</p>
       </div>
       
       <div className="cuerpo1">

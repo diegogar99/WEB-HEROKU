@@ -456,49 +456,31 @@ class CuerpoAdministracion extends React.Component {
               <>
                 {!this.state.confirmado ?
                 <>
-                  <form onSubmit={this.handleSubmitCode}>
-                      {/*<strong>Introduce el codigo que te hemos enviado:</strong>
-                      <br></br><br></br>
-                      <input type='password' name = "code"id="code"onChange={this.handleChange}/>*/}
-                      <br></br>
+                  <form className="formularioCode" onSubmit={this.handleSubmitCode}>
+                     
+                       <br></br>
                       <div className="input-field">
                         <i className="material-icons prefix circle">password</i>
                         <input ref={this.inputContra2Val} type='password' name = "code"id="code"onChange={this.handleChange} placeholder="Introduce el codigo que te hemos enviado"/>
                         
                       </div>
                       {errors.code && <p className="warning">{errors.code}</p>}
-                       {/*<div className="input-field">
-                        <i className="material-icons prefix">lock</i>
-                        <input ref={this.inputContraVal} type='password' name = "old"id="old"onChange={this.verificarPasswd} placeholder="Introduce la contraseña actual"/>
-                        {errors.code && <p className="warning">{errors.code}</p>}
-                        {errors.passwdCorrecta && <p className="warning">{errors.passwdCorrecta}</p>}
-                    </div>*/}
-
-
-
-
-
-                      {/*<strong>Introduce la contraseña actual:</strong>
+                      
                       <br></br><br></br>
-                      <input type='password' name = "old"id="old"onChange={this.verificarPasswd}/>
-                      {errors.code && <p className="warning">{errors.code}</p>}
-                      {errors.passwdCorrecta && <p className="warning">{errors.passwdCorrecta}</p>}*/}
-            
-                      <br></br><br></br>
-                      <input type='submit' className="btn waves-effect waves-light mr-5" value='Enviar'/>
-                      <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup1.bind(this)}/>
+                      <input type='submit' className="btn waves-effect waves-light" value='Enviar'/>
+                      <input type='button' className="btn waves-effect waves-light ml-5" value='Cerrar' onClick={this.togglePopup1.bind(this)}/>
                   </form>
                 </>
                 :
                 <>
                 
-                  <form onSubmit={this.handleSubmitContra}>
-
+                  <form className="formularioLogin"onSubmit={this.handleSubmitContra}>
+ 
 
                       <div className="input-field">
                         
                         <i className="material-icons prefix">lock</i>
-                        <input type='password' name = "contrasenya"id="contrasenya"onChange={this.handleChange2} value={this.state.contrasenya}/>
+                        <input type='password' name = "contrasenya"id="contrasenya"onChange={this.handleChange2} value={this.state.contrasenya} placeholder="Nueva contraseña"/>
                       
                         <button className="btn-floating blue prefix" onClick={this.togglePopup4.bind(this)}>
                           <i className="material-icons circle">edit</i>
@@ -508,24 +490,12 @@ class CuerpoAdministracion extends React.Component {
                         {errorsC.contrasenya && <p className="warning">{errorsC.contrasenya}</p>}
                       </div>
 
-                   {/*<pre>
-                   <label className="passwdControl" htmlFor="contrasenya"><label>                          </label>Nueva contraseña     
-                      <label>      </label>
-                      <input type='password' name = "contrasenya"id="contrasenya"onChange={this.handleChange} value={this.state.contrasenya}/>
-                      <label> </label>
-                      <input type="button" className="editButton" onClick={this.togglePopup4.bind(this)}/>
-                
-                    </label>
-             
-                    <PasswordStrengthMeter password = {this.state.contrasenya}/>
-                    {errorsC.contrasenya && <p className="warning">{errorsC.contrasenya}</p>}*/}
-                   
-
+            
                                   
                 
                       <div className="input-field">
                         <i className="material-icons prefix">lock</i>
-                        <input ref={this.inputContra3Val}type='password' name = "contrasenya_verif"id="contrasenya_verif"onChange={this.handleChange} value={avanzado ? this.state.contrasenya:undefined}/>
+                        <input ref={this.inputContra3Val}type='password' name = "contrasenya_verif"id="contrasenya_verif"onChange={this.handleChange} value={avanzado ? this.state.contrasenya:undefined}  placeholder="Repita la contraseña"/>
                         {errorsC.registro && <p className="warning">{errorsC.registro}</p>}
                         {errorsC.contrasenya_verif && <p className="warning">{errorsC.contrasenya_verif}</p>}
                         {errorsC.coinciden && <p className="warning">{errorsC.coinciden}</p>}
@@ -533,15 +503,7 @@ class CuerpoAdministracion extends React.Component {
 
 
 
-                  {/*
-                    <div className="contrasenyaRepita">
-                    <label htmlFor="contrasenya">Repita la contraseña  </label>
-                      <input type='password' name = "contrasenya_verif"id="contrasenya_verif"onChange={this.handleChange} value={avanzado ? this.state.contrasenya:undefined}/>
-                      {errorsC.contrasenya_verif && <p className="warning">{errorsC.contrasenya_verif}</p>}
-                      {errorsC.coinciden && <p className="warning">{errorsC.coinciden}</p>}
-                      </div>
-                    </pre>
-                    <br/>*/}
+  
 
 
 
@@ -589,7 +551,7 @@ class CuerpoAdministracion extends React.Component {
                 {!this.state.eliminada ?
                 <>
                  {!this.state.confirmado ?
-                  <form onSubmit={this.handleSubmitCode2}>
+                  <form className="formularioCode" onSubmit={this.handleSubmitCode2}>
 
                       <div className="input-field">
                         <i className="material-icons prefix circle">password</i>
@@ -597,25 +559,7 @@ class CuerpoAdministracion extends React.Component {
                         
                       </div>
                       {errors.code && <p className="warning">{errors.code}</p>}
-                      {/*<div className="input-field">
-                        <i className="material-icons prefix">lock</i>
-                        <input type='password' name = "old"id="old"onChange={this.verificarPasswd} placeholder="Introduce la contraseña actual"/>
-                        {errors.code && <p className="warning">{errors.code}</p>}
-                        {errors.iguales && <p className="warning">{errors.iguales}</p>}
-                      </div>*/}
-{/*
-                      <strong>Introduce el codigo que te hemos enviado:</strong>
-                      <br></br><br></br>
-                      <input type='password' name = "code"id="code"onChange={this.handleChange}/>
-                      <br></br>
-                      <strong>Introduce la contraseña actual:</strong>
-                      <br></br><br></br>
-                      <input type='password' name = "old"id="old"onChange={this.verificarPasswd}/>
-                      {errors.code && <p className="warning">{errors.code}</p>}
-                      {errors.iguales && <p className="warning">{errors.iguales}</p>}
-            
-                      <br></br><br></br>
-*/}
+                   
                       <input type='submit' className="btn waves-effect waves-light mr-5" value='Enviar'/>
                       <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
                   </form>

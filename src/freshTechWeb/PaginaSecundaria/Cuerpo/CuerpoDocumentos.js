@@ -44,21 +44,21 @@ function verificarFecha(fechaVerif){
   if(dia == 30 || dia == 31 || mes == 2){
 
     if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12){
-      if(dia == 31){
+      if(dia <= 31){
         valida = true;
       }
     }else if (mes == 2){
       if ((anyo % 4 == 0 && anyo % 100 != 0)||(anyo % 400 == 0)){
-        if(dia == 29){
+        if(dia <= 29){
           valida = true;
         }
       }else{
-        if(dia == 28){
+        if(dia <= 28){
           valida = true;
         }
       }
     }else if(mes == 4 || mes == 6 || mes == 9){
-      if(dia == 30){
+      if(dia <= 30){
         valida = true;
       }
     }
@@ -71,11 +71,11 @@ function verificarFecha(fechaVerif){
 const validate = values =>{
   const errors = {}
 
-  if (!values.nombreImg){
-    errors.nombreImg = 'Introduzca nombre válido'
+  if (!values.nombreFile){
+    errors.nombreFile = 'Introduzca nombre válido'
   }
-  if (!values.expiracionImg || !/[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]/.test(values.expiracionImg)||!compararFechas(values.creacionImg,values.expiracionImg) || !verificarFecha(values.expiracionImg)){
-    errors.expiracionImg = 'Introduzca fecha válida'
+  if (!values.expiracionFile || !/[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]/.test(values.expiracionFile)||!compararFechas(values.creacionImg,values.expiracionFile) || !verificarFecha(values.expiracionFile)){
+    errors.expiracionFile = 'Introduzca fecha válida'
   }
   return errors
 }
@@ -87,6 +87,24 @@ function compararFechas(fecha1,fecha2){
   
   return fechaAct < fechaCad;
 
+}
+//Busca elemento en lista y devuelve indice o -1 si no está
+function buscar(lista,elemento){
+  var i;
+  for(i=0; i< lista.length; i++){
+    if(lista[i] == elemento){
+      return i;
+    }
+  }
+  return -1;
+}
+
+//Permuta dos elementos de una lista
+function permuta(indice1, indice2, lista){
+  var elemento = lista[indice1];
+  lista[indice1] = lista[indice2];
+  lista[indice2] = elemento;
+  return lista;
 }
 
 ///////////////////////////////////////////////////////////
@@ -104,14 +122,14 @@ class CuerpoDocumentos extends React.Component {
       showPopup:false,
       showPopup2:false,
       showPopup5:false,
-      nombreImg:'',
+      nombreFile:'',
       errors: {},
       creacionImg:fecha(),
-      expiracionImg:'',
+      expiracionFile:'',
       cargaContenido:true,
       token: localStorage.getItem('token'),
       listadoCategorias:[],
-      categoria:'cat',
+      categoria:localStorage.getItem('categoria'),
       vacio:true,
       ordenarPor:localStorage.getItem('ordenarPor'),
       ordenarDe:localStorage.getItem('ordenarDe'),
@@ -155,7 +173,13 @@ class CuerpoDocumentos extends React.Component {
     )
     .then(response =>{
       console.log(response.data);
-      this.setState({listadoCategorias:response.data,cargaContenido:false});
+      var categoriasList = response.data;
+      
+      if(categoriasList.length >0){
+        categoriasList[categoriasList.length] = {nombrecat:"Sin categoría"};
+      }
+      
+      this.setState({listadoCategorias:categoriasList,cargaContenido:false});
     })
   }
 //CREO NUEVO FICHERO
@@ -167,7 +191,7 @@ class CuerpoDocumentos extends React.Component {
     .then(response =>{
       console.log(response.data);
       this.setState({cargaContenido:true},() => this.togglePopup());
- 
+      localStorage.removeItem('categoria');
     })
   }
 
@@ -183,7 +207,7 @@ class CuerpoDocumentos extends React.Component {
   }
 
   //SELECCIONO FICHEROS PARA MOSTRARLOS
-  selectImagenes=async(value)=>{
+  selectFiles=async(value)=>{
     var lista = [];
     var indice = 0;
     var orden = '';
@@ -259,11 +283,40 @@ class CuerpoDocumentos extends React.Component {
       this.imgEdit.activacion=response.data.fechacreacion;
       this.imgEdit.caducidad=response.data.fechacaducidad;
       this.imgEdit.url=response.data.nombreImagen;
-      this.imgEdit.categoria=response.data.categoria;
+     
+      if(response.data.categoria == null){
+        this.imgEdit.categoria="Sin categoría"
+      }else{
+        this.imgEdit.categoria=response.data.categoria;
+      }
       this.imgEdit.nombre=value1;
-      
-      
       let array = this.state.listadoCategorias;
+      if(array.length > 0){
+        this.copiaLista.listaCopia = array.map((data) => data.nombrecat);
+      }else{
+        if(this.imgEdit.categoria == null){
+          this.copiaLista.listaCopia[0] =  "Sin categoría";
+        }else{
+          this.copiaLista.listaCopia[0] =  this.imgEdit.categoria;
+        }
+      }
+      if(this.copiaLista.listaCopia[0] == "sin categorias disponibles"){
+        this.copiaLista.listaCopia[0] =  this.imgEdit.categoria;
+      }else{
+
+        var indiceElemento = buscar( this.copiaLista.listaCopia,this.imgEdit.categoria);
+        if(indiceElemento == -1){
+          this.copiaLista.listaCopia[this.copiaLista.listaCopia.length] = this.copiaLista.listaCopia[0];
+          this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
+        }else{
+          this.copiaLista.listaCopia = permuta(0, indiceElemento,this.copiaLista.listaCopia);
+        }
+      }
+     
+
+
+
+      {/*let array = this.state.listadoCategorias;
       console.log("LISTADO: ",this.state.listadoCategorias);
       if(array.length > 0){
         this.miListaC.listaC = array.map((data) => data.nombrecat);
@@ -301,7 +354,7 @@ class CuerpoDocumentos extends React.Component {
           }
       
         }
-        
+      */}
 
       
       this.togglePopup2();
@@ -340,12 +393,12 @@ class CuerpoDocumentos extends React.Component {
   actualizarFile=async(value1,value2)=>{
     console.log("Token: ", value2);
     console.log("NombreAnt: ", this.state.nombreAnterior);
-    console.log("Nombre: ", this.state.nombreImg);
+    console.log("Nombre: ", this.state.nombreFile);
     console.log("Categoria: ", value1);
-    console.log("Caducidad: ", this.state.expiracionImg);
+    console.log("Caducidad: ", this.state.expiracionFile);
     console.log("Creacion: ", this.state.creacionImg);
     
-    const datos = {nuevoNombre:this.state.nombreImg, categoria:value1,fechacreacion:this.state.creacionImg,fechacaducidad:this.state.expiracionImg,nombreAntiguo:this.state.nombreAnterior,actualizaImagen:'no'};
+    const datos = {nuevoNombre:this.state.nombreFile, categoria:value1,fechacreacion:this.state.creacionImg,fechacaducidad:this.state.expiracionFile,nombreAntiguo:this.state.nombreAnterior,actualizaImagen:'no'};
     console.log("DATOS: ", datos);
     const headers = {'Authorization':`Bearer ${value2}`};
     await axios.post('https://fresh-techh.herokuapp.com/editFile',datos,{headers},
@@ -364,12 +417,12 @@ class CuerpoDocumentos extends React.Component {
   actualizFile=async(value1,value2)=>{
     console.log("Token: ", value2);
     console.log("NombreAnt: ", this.state.nombreAnterior);
-    console.log("Nombre: ", this.state.nombreImg);
+    console.log("Nombre: ", this.state.nombreFile);
     console.log("Categoria: ", value1);
-    console.log("Caducidad: ", this.state.expiracionImg);
+    console.log("Caducidad: ", this.state.expiracionFile);
     console.log("Creacion: ", this.state.creacionImg);
     
-    const datos = {nuevoNombre:this.state.nombreImg, categoria:value1,fechacreacion:this.state.creacionImg,fechacaducidad:this.state.expiracionImg,nombreAntiguo:this.state.nombreAnterior,actualizaImagen:'no'};
+    const datos = {nuevoNombre:this.state.nombreFile, categoria:value1,fechacreacion:this.state.creacionImg,fechacaducidad:this.state.expiracionFile,nombreAntiguo:this.state.nombreAnterior,actualizaImagen:'no'};
     console.log("DATOS: ", datos);
     const headers = {'Authorization':`Bearer ${value1}`};
     await axios.post('https://fresh-techh.herokuapp.com/editFile',value2,{headers},
@@ -377,6 +430,7 @@ class CuerpoDocumentos extends React.Component {
     .then(response =>{
       console.log("ACTUALIZO: ", response.data);
       this.setState({cargaContenido:true},() => this.togglePopup2());
+      localStorage.removeItem('categoria');
       window.location.reload();
       
     })
@@ -392,10 +446,10 @@ class CuerpoDocumentos extends React.Component {
   //EDITA FICHERO
   actualizar(value){
 
-    this.dataFileFileEdit.set('nuevoNombre', this.state.nombreImg);
+    this.dataFileFileEdit.set('nuevoNombre', this.state.nombreFile);
     this.dataFileFileEdit.set('categoria', value);
     this.dataFileFileEdit.set('fechacreacion', this.state.creacionImg);
-    this.dataFileFileEdit.set('fechacaducidad', this.state.expiracionImg);
+    this.dataFileFileEdit.set('fechacaducidad', this.state.expiracionFile);
     this.dataFileFileEdit.set('nombreAntiguo', this.state.nombreAnterior);
 
     this.actualizFile(this.state.token,this.dataFileFileEdit);
@@ -413,6 +467,7 @@ class CuerpoDocumentos extends React.Component {
     e.preventDefault();
     
     var file = e.currentTarget.id;
+   
     this.selectFileDetails(file,this.state.token);
   }
   //DESCARGAR FICHERO
@@ -426,12 +481,25 @@ class CuerpoDocumentos extends React.Component {
   //CREA FICHERO NUEVO
   enviarImg(e){
     
-    console.log('nombre', this.state.nombreImg);
-    console.log('fechacaducidad', this.state.expiracionImg);
-    this.dataFile.set('nombre', this.state.nombreImg);
-    this.dataFile.set('categoria', this.state.categoria);
+    console.log('nombre', this.state.nombreFile);
+    console.log('fechacaducidad', this.state.expiracionFile);
+    this.dataFile.set('nombre', this.state.nombreFile);
+    if(localStorage.getItem('categoria') == null){
+      console.log("NO1");
+      if((this.miListaC.listaC[0] != "Sin categoría") && (this.miListaC.listaC[0] != "sin categorias disponibles")){
+        this.dataFile.set('categoria', this.miListaC.listaC[0]);
+       
+      }
+    }
+    else if((localStorage.getItem('categoria') != "Sin categoría") && (localStorage.getItem('categoria') != "sin categorias disponibles")){
+      console.log("NO2");
+      this.dataFile.set('categoria', localStorage.getItem('categoria'));
+    }else{
+      this.dataFile.delete('categoria');
+    }
+    console.log("CATEGORIA ENVIADA: ", localStorage.getItem('categoria'));
     this.dataFile.set('fechacreacion', this.state.creacionImg);
-    this.dataFile.set('fechacaducidad', this.state.expiracionImg);
+    this.dataFile.set('fechacaducidad', this.state.expiracionFile);
     this.sendFile(this.state.token,this.dataFile);
 
   }
@@ -479,7 +547,8 @@ class CuerpoDocumentos extends React.Component {
 
   togglePopup() {
     this.setState({
-      showPopup: !this.state.showPopup
+      showPopup: !this.state.showPopup,
+      errors:{},
     });
     let array = this.state.listadoCategorias;
     if(array.length > 0){
@@ -492,8 +561,8 @@ class CuerpoDocumentos extends React.Component {
       showPopup2: !this.state.showPopup2,
       errors:{},
       nombreAnterior:this.imgEdit.nombre,
-      expiracionImg:this.imgEdit.caducidad,
-      nombreImg:this.imgEdit.nombre,
+      expiracionFile:this.imgEdit.caducidad,
+      nombreFile:this.imgEdit.nombre,
   
     });
 
@@ -551,7 +620,7 @@ class CuerpoDocumentos extends React.Component {
    
   render () {
     const { errors,token,cargaContenido} = this.state
-    {cargaContenido && this.selectImagenes(token)}
+    {cargaContenido && this.selectFiles(token)}
     {cargaContenido && this.selectCategorias(token)}
 
     return (
@@ -622,7 +691,7 @@ class CuerpoDocumentos extends React.Component {
           </>
         
    
-      }
+      } 
        
     {this.state.showPopup ? 
           <Popup
@@ -641,8 +710,8 @@ class CuerpoDocumentos extends React.Component {
                 <div className="pup">
                 <div className="input-field">
                   <i className="material-icons prefix">assignment</i>
-                  <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange} placeholder="Nombre"/>
-                  {errors.nombreImg && <p className="warning">{errors.nombreImg}</p>}
+                  <input type="text" name="nombreFile"id="nombreFile" onChange={this.handleChange} placeholder="Nombre"/>
+                  {errors.nombreFile && <p className="warning">{errors.nombreFile}</p>}
                 </div>
              
                 <div className="input-field">
@@ -653,8 +722,8 @@ class CuerpoDocumentos extends React.Component {
 
                 <div className="input-field">
                   <i className="material-icons prefix">event_busy</i>
-                  <input type="date" name="expiracionImg"id="expiracionImg" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange}/>
-                  {errors.expiracionImg && <p className="warning">{errors.expiracionImg}</p>}
+                  <input type="date" name="expiracionFile"id="expiracionFile" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange}/>
+                  {errors.expiracionFile && <p className="warning">{errors.expiracionFile}</p>}
                 </div>
 
 
@@ -689,8 +758,8 @@ class CuerpoDocumentos extends React.Component {
                   <div className="pup">
                   <div className="input-field">
                     <i className="material-icons prefix">assignment</i>
-                    <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange} placeholder="Nombre" defaultValue={this.imgEdit.nombre}/>
-                    {errors.nombreImg && <p className="warning">{errors.nombreImg}</p>}
+                    <input type="text" name="nombreFile"id="nombreFile" onChange={this.handleChange} placeholder="Nombre" defaultValue={this.imgEdit.nombre}/>
+                    {errors.nombreFile && <p className="warning">{errors.nombreFile}</p>}
                   </div>
              
                   <div className="input-field">
@@ -701,8 +770,8 @@ class CuerpoDocumentos extends React.Component {
 
                   <div className="input-field">
                     <i className="material-icons prefix">event_busy</i>
-                    <input type="date" name="expiracionImg"id="expiracionImg" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange} defaultValue={this.imgEdit.caducidad}/>
-                    {errors.expiracionImg && <p className="warning">{errors.expiracionImg}</p>}
+                    <input type="date" name="expiracionFile"id="expiracionFile" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange} defaultValue={this.imgEdit.caducidad}/>
+                    {errors.expiracionFile && <p className="warning">{errors.expiracionFile}</p>}
                   </div>
                 <br/>
           

@@ -191,7 +191,19 @@ class CuerpoContraseña extends React.Component {
 
     
   }
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
 
+  //LISTA ORDENAR
+  miListaV={
+    listaV:["Nombre","Fecha de creación", "Fecha de caducidad"]
+  }
+  //LISTA CATEGORIAS
+  miListaC={
+    listaC:["sin categorias disponibles"]
+  }
+  
 
    ///////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////
@@ -416,14 +428,9 @@ selectCategorias=async(value)=>{
     )
     .then(response =>{
      
-      let array = this.state.listadoCategorias;
-      if(array.length > 0){
-        this.miListaC.listaC = array.map((data) => data.nombrecat);
-      }
-      
      
       
-      this.contraEdit.usuario=response.data.concreteuser;
+      {/*this.contraEdit.usuario=response.data.concreteuser;
       this.contraEdit.activacion=response.data.fechacreacion;
       this.contraEdit.caducidad=response.data.fechacaducidad;
       this.contraEdit.contrasenya=response.data.concretpasswd;
@@ -457,7 +464,7 @@ selectCategorias=async(value)=>{
         }else{
           this.copiaLista.listaCopia = permuta(0, indiceElemento,this.copiaLista.listaCopia);
         }
-      }
+      }*/}
       this.togglePopup2();
      
     })
@@ -675,18 +682,6 @@ selectCategorias=async(value)=>{
 
 
   
-  ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-
-  //LISTA ORDENAR
-  miListaV={
-    listaV:["Nombre","Fecha de creación", "Fecha de caducidad"]
-  }
-  //LISTA CATEGORIAS
-  miListaC={
-    listaC:["sin categorias disponibles"]
-  }
   
 
 

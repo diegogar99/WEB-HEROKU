@@ -139,7 +139,7 @@ class CuerpoDocumentos extends React.Component {
       imgShow: '',
       imgUrl:'',
     }
-    this.imgEdit={
+    this.fileEdit={
       nombre:'',
       url:'',
       caducidad:'',
@@ -257,7 +257,7 @@ class CuerpoDocumentos extends React.Component {
         this.setState({listadoDocumentos:lista,cargaContenido:false,cargando:false});
     })
   }
-//GET PIC PARA VISUALIZAR FICHERO
+//GET FILE PARA VISUALIZAR FICHERO
   showFiles=async(value1,value2)=>{
 
     await axios.get('https://fresh-techh.herokuapp.com/getFile',{params:{nombre:`${value1}`},headers:{'Authorization':`Bearer ${value2}`}}
@@ -272,89 +272,48 @@ class CuerpoDocumentos extends React.Component {
     })
   }
 
-//GET PIC PARA VISUALIZAR FICHERO2
+//GET FILE PARA VISUALIZAR FICHERO2
   selectFileDetails=async(value1,value2)=>{
 
     await axios.get('https://fresh-techh.herokuapp.com/getFile',{params:{nombre:`${value1}`},headers:{'Authorization':`Bearer ${value2}`}}
     )
     .then(response =>{
 
-      console.log("IMAGEN NOMBRE: ", response.data);
-      this.imgEdit.activacion=response.data.fechacreacion;
-      this.imgEdit.caducidad=response.data.fechacaducidad;
-      this.imgEdit.url=response.data.nombreImagen;
-     
+      console.log("Fichero NOMBRE: ", response.data);
+      this.fileEdit.activacion=response.data.fechacreacion;
+      this.fileEdit.caducidad=response.data.fechacaducidad;
+      this.fileEdit.url=response.data.nombreImagen;
+      this.fileEdit.nombre=value1;
+
       if(response.data.categoria == null){
-        this.imgEdit.categoria="Sin categoría"
+        this.fileEdit.categoria="Sin categoría"
       }else{
-        this.imgEdit.categoria=response.data.categoria;
+        this.fileEdit.categoria=response.data.categoria;
       }
-      this.imgEdit.nombre=value1;
+      
       let array = this.state.listadoCategorias;
       if(array.length > 0){
         this.copiaLista.listaCopia = array.map((data) => data.nombrecat);
       }else{
-        if(this.imgEdit.categoria == null){
+        if(this.fileEdit.categoria == null){
           this.copiaLista.listaCopia[0] =  "Sin categoría";
         }else{
-          this.copiaLista.listaCopia[0] =  this.imgEdit.categoria;
+          this.copiaLista.listaCopia[0] =  this.fileEdit.categoria;
         }
       }
       if(this.copiaLista.listaCopia[0] == "sin categorias disponibles"){
-        this.copiaLista.listaCopia[0] =  this.imgEdit.categoria;
+        this.copiaLista.listaCopia[0] =  this.fileEdit.categoria;
       }else{
 
-        var indiceElemento = buscar( this.copiaLista.listaCopia,this.imgEdit.categoria);
+        var indiceElemento = buscar( this.copiaLista.listaCopia,this.fileEdit.categoria);
         if(indiceElemento == -1){
           this.copiaLista.listaCopia[this.copiaLista.listaCopia.length] = this.copiaLista.listaCopia[0];
-          this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
+          this.copiaLista.listaCopia[0] = this.fileEdit.categoria;
         }else{
           this.copiaLista.listaCopia = permuta(0, indiceElemento,this.copiaLista.listaCopia);
         }
       }
      
-
-
-
-      {/*let array = this.state.listadoCategorias;
-      console.log("LISTADO: ",this.state.listadoCategorias);
-      if(array.length > 0){
-        this.miListaC.listaC = array.map((data) => data.nombrecat);
-      }
-      console.log("ORIGINAL: ",  this.miListaC.listaC);
-      var longitud = (this.miListaC.listaC.length) + 1;
-      var elemento = this.miListaC.listaC[0];
-      var existe = false;
-      var id = 0;
-     
-      for (var i= 0; i < this.miListaC.listaC.length; i++){
-        this.copiaLista.listaCopia[i] = this.miListaC.listaC[i];
-        if(elemento != "sin categorias disponibles"){
-          if(this.copiaLista.listaCopia[i] == this.imgEdit.categoria){
-            existe = true;
-            id = i;
-          }
-        }
-      } 
-      
- 
-        if (elemento == "sin categorias disponibles"){
-          console.log("NANAI");
-          this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
- 
-        }else{
-          if (existe){
-            console.log("EXISTE");
-            this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
-            this.copiaLista.listaCopia[id] = elemento;
-          }else{
-            console.log("NO EXISTE");
-            this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
-            this.copiaLista.listaCopia[longitud] = elemento;
-          }
-      
-        }
-      */}
 
       
       this.togglePopup2();
@@ -389,7 +348,7 @@ class CuerpoDocumentos extends React.Component {
   })
 
   }
- //EDITAR FICHERO
+ //EDITAR FICHERO NO SE USA
   actualizarFile=async(value1,value2)=>{
     console.log("Token: ", value2);
     console.log("NombreAnt: ", this.state.nombreAnterior);
@@ -478,8 +437,9 @@ class CuerpoDocumentos extends React.Component {
     
     
   }
+
   //CREA FICHERO NUEVO
-  enviarImg(e){
+  enviarFile(e){
     
     console.log('nombre', this.state.nombreFile);
     console.log('fechacaducidad', this.state.expiracionFile);
@@ -503,6 +463,7 @@ class CuerpoDocumentos extends React.Component {
     this.sendFile(this.state.token,this.dataFile);
 
   }
+
   ///////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////
@@ -560,9 +521,9 @@ class CuerpoDocumentos extends React.Component {
     this.setState({
       showPopup2: !this.state.showPopup2,
       errors:{},
-      nombreAnterior:this.imgEdit.nombre,
-      expiracionFile:this.imgEdit.caducidad,
-      nombreFile:this.imgEdit.nombre,
+      nombreAnterior:this.fileEdit.nombre,
+      expiracionFile:this.fileEdit.caducidad,
+      nombreFile:this.fileEdit.nombre,
   
     });
 
@@ -596,7 +557,7 @@ class CuerpoDocumentos extends React.Component {
     if(!Object.keys(result).length){ //Si tiene propiedades, hay error
       //Envio formulario
       console.log('Formulario válido')
-      this.enviarImg();
+      this.enviarFile();
     }else{
 
       console.log('Formulario inválido')
@@ -758,7 +719,7 @@ class CuerpoDocumentos extends React.Component {
                   <div className="pup">
                   <div className="input-field">
                     <i className="material-icons prefix">assignment</i>
-                    <input type="text" name="nombreFile"id="nombreFile" onChange={this.handleChange} placeholder="Nombre" defaultValue={this.imgEdit.nombre}/>
+                    <input type="text" name="nombreFile"id="nombreFile" onChange={this.handleChange} placeholder="Nombre" defaultValue={this.fileEdit.nombre}/>
                     {errors.nombreFile && <p className="warning">{errors.nombreFile}</p>}
                   </div>
              
@@ -770,7 +731,7 @@ class CuerpoDocumentos extends React.Component {
 
                   <div className="input-field">
                     <i className="material-icons prefix">event_busy</i>
-                    <input type="date" name="expiracionFile"id="expiracionFile" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange} defaultValue={this.imgEdit.caducidad}/>
+                    <input type="date" name="expiracionFile"id="expiracionFile" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange} defaultValue={this.fileEdit.caducidad}/>
                     {errors.expiracionFile && <p className="warning">{errors.expiracionFile}</p>}
                   </div>
                 <br/>

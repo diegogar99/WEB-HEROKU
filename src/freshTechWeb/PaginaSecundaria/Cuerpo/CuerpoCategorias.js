@@ -8,15 +8,25 @@ import axios from 'axios';
 import 'materialize-css/dist/css/materialize.min.css'
 
 
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//FUNCIONES AUXILIARES PARA GESTIONAR ERRORES
 const validate = values =>{
   const errors = {}
 
   if (!values.categoria){
     errors.categoria = 'Introduzca una categoría valida'
-  }
+  } 
   
   return errors
 }
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+//CLASE CUERPOCATEGORIAS
 class CuerpoCategorias extends React.Component {
 
   constructor(props){
@@ -33,11 +43,17 @@ class CuerpoCategorias extends React.Component {
       cargando:true,
    
     }
-      
+  
     this.catEdit={nombre:''};
     
   }
 
+  ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//AXIOS CONEXION CON API
+
+//ENVIA LA NUEVA CATEGORIA CREADA
   crearCategoria=async(value)=>{
     console.log("ENTRA CAT: ",value);
     const body = {nombrecategoria:this.state.categoria};
@@ -48,17 +64,15 @@ class CuerpoCategorias extends React.Component {
       console.log(response.data);
       this.setState({cargaContenido:true});
       this.togglePopup();
-      
-      
-     
+
     })
   
   }
 
+  //SELECCIONA CATEGORIAS EXISTENTES
   selectCategorias=async(value)=>{
     console.log("ENTRAAA");
-    //const query = {ordenarPor:this.state.ordenarPor,ordenarDe:this.state.ordenarDe};
-    //const headers = {'Authorization':`Bearer ${value}`};
+
     const config = {
       
       headers: {'Authorization':`Bearer ${value}`},
@@ -76,7 +90,7 @@ class CuerpoCategorias extends React.Component {
     })
   
   }
-
+//ELIMINA CATEGORIA SELECCIONADA
   deleteCategorias=async(value1,value2)=>{
     console.log("ENTRAAA: ", value1, " -- ", value2);
   
@@ -85,13 +99,13 @@ class CuerpoCategorias extends React.Component {
     .then(response =>{
       console.log(response.data);
       this.setState({cargaContenido:true});
-      //window.location.reload(true);
     })
     .catch(error=>{
       console.log(error.response.data);
      
     })
   }
+  //ACTUALIZA NOMBRE DE UNA CATEGORÍA SELECCIONADA
   editarCategoria=async(value2)=>{
   
     const datos = {nomCatAntigua:this.catEdit.nombre,nomCatNueva:this.state.categoria};
@@ -104,15 +118,32 @@ class CuerpoCategorias extends React.Component {
       
       
     })
-    .catch(error=>{
   
-    })
   }
+    ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+
+  //FUNCIONES QUE USAN LAS AXIOS
+  //ACTUALIZAR CATEGORIA
   editar=e=>{
     this.catEdit.nombre = e.currentTarget.id;
     this.togglePopup2();
   }
-  
+  //ELIMINAR CATEGORÍA
+  delete =e =>{
+    e.preventDefault();
+    console.log("ELEGIDA: ", e.currentTarget.id);
+    var cat = e.currentTarget.id;
+    this.deleteCategorias(cat,this.state.token);
+    
+  }
+
+   ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  //POPUPS
+
   togglePopup() {
     this.setState({
       showPopup: !this.state.showPopup
@@ -123,12 +154,19 @@ class CuerpoCategorias extends React.Component {
       showPopup2: !this.state.showPopup2
     });
   }
+
+
+   ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+
+  //HANDLE CHANGE
   handleChange = ({target}) => {
     const{name,value} = target
     this.setState({[name]:value})
    
   }
-
+//FORMULARIOS SUBMIT
   handleSubmit =e => {
     e.preventDefault()
     console.log("?????");
@@ -162,13 +200,7 @@ class CuerpoCategorias extends React.Component {
       console.log('Formulario inválido')
     }
   }
-  delete =e =>{
-    e.preventDefault();
-    console.log("ELEGIDA: ", e.currentTarget.id);
-    var cat = e.currentTarget.id;
-    this.deleteCategorias(cat,this.state.token);
-    
-  }
+
   render () {
     
     const { errors,token,cargaContenido} = this.state
@@ -178,7 +210,7 @@ class CuerpoCategorias extends React.Component {
       <>
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
       
-  
+      
      
       <br></br><br></br>     
       {this.state.cargando ?
@@ -231,41 +263,13 @@ class CuerpoCategorias extends React.Component {
     }   
 
 
-  
-      {/*<pre><table className="tablaCategorias">
-           <tbody>
-            <tr>
-              <td>
-                <img className="categoriasDePrueba" src={categorias}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              <td>
-                <img className="categoriasDePrueba" src={categorias}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              <td>
-                <img className="categoriasDePrueba" src={categorias}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              
-            </tr>
-           </tbody>
-    </table></pre>*/}
-
       {this.state.showPopup ? 
           <Popup
             text='Selecciona las imagenes:'
             cuerpo={
               <>
               <form className="pup" onSubmit={this.handleSubmit}>
-                {/*<label htmlFor="categoria"><pre>Nueva categoria  </pre></label>
-                  <input type="text" name="categoria"id="categoria" onChange={this.handleChange}/>*/}
+              
                    <div className="input-field">
                       <i className="material-icons prefix circle">assignment</i>
                       <input type="text" name="categoria"id="categoria" onChange={this.handleChange} placeholder={"Introduzca una categoría nueva"}/>
@@ -281,7 +285,6 @@ class CuerpoCategorias extends React.Component {
       
               </>
             }
-            //sendData={<button type="Submit" className="Send" onClick={() => this.postData()}>Send</button>}
             eliminada={false}
           />
           : null
@@ -292,22 +295,20 @@ class CuerpoCategorias extends React.Component {
             cuerpo={
               <>
               <form className="pup" onSubmit={this.handleSubmitEdit}>
-                {/*<label htmlFor="categoria"><pre>Nueva categoria  </pre></label>
-                  <input type="text" name="categoria"id="categoria" onChange={this.handleChange}/>*/}
+              
                    <div className="input-field">
                       <i className="material-icons prefix circle">assignment</i>
                       <input type="text" name="categoria"id="categoria" onChange={this.handleChange} placeholder={"Introduzca una categoria"} defaultValue={this.catEdit.nombre}/>
                       {errors.categoria && <p className="warning">{errors.categoria}</p>}
                     </div>
                 <br/>
-                <input type='submit' class="btn waves-effect waves-light ml-5" value='Actualizar'/>
+                <input type='submit' class="btn waves-effect waves-light mr-5" value='Actualizar'/>
                 <input type='button' class="btn waves-effect waves-light" value='Cancelar' onClick={this.togglePopup2.bind(this)}/>
               </form>
                
       
               </>
             }
-            //sendData={<button type="Submit" className="Send" onClick={() => this.postData()}>Send</button>}
             eliminada={false}
           />
           : null

@@ -43,8 +43,14 @@ export default function SimpleMenu() {
     setAnchorEl(event.currentTarget);
   };
 
+  const vaciarLocalMem=e=>{
+    localStorage.removeItem('categoria');
+    localStorage.removeItem('ordenarPor');
+    localStorage.removeItem('ordenarDe');
+  };
   const handleClose = () => {
     setAnchorEl(null);
+    vaciarLocalMem();
   };
 
   return (

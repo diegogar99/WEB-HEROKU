@@ -459,10 +459,10 @@ selectCategorias=async(value)=>{
       }else{
 
         var indiceElemento = buscar( this.copiaLista.listaCopia,this.contraEdit.categoria);
-        /* if(indiceElemento == -1){
+        if(indiceElemento == -1){
           this.copiaLista.listaCopia[this.copiaLista.listaCopia.length] = this.copiaLista.listaCopia[0];
           this.copiaLista.listaCopia[0] = this.contraEdit.categoria;
-        }else{
+        }/*else{
           this.copiaLista.listaCopia = permuta(0, indiceElemento,this.copiaLista.listaCopia);
         }*/
       }

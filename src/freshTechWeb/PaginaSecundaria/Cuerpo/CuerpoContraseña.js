@@ -453,10 +453,10 @@ selectCategorias=async(value)=>{
           this.copiaLista.listaCopia[0] =  this.contraEdit.categoria;
         }
       }
-      {/* 
+      
       if(this.copiaLista.listaCopia[0] == "sin categorias disponibles"){
         this.copiaLista.listaCopia[0] =  this.contraEdit.categoria;
-      }else{
+      }{/* else{
 
         var indiceElemento = buscar( this.copiaLista.listaCopia,this.contraEdit.categoria);
         if(indiceElemento == -1){

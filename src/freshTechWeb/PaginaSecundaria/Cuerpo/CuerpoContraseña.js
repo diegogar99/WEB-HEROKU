@@ -350,7 +350,7 @@ selectCategorias=async(value)=>{
       }
     }
     else if((localStorage.getItem('categoria') != "Sin categoría") && (localStorage.getItem('categoria') != "sin categorias disponibles")){
-      this.dataFile.set('categoria', localStorage.getItem('categoria'));
+    
       catAEnviar=localStorage.getItem('categoria');
     }
     const datos = {concreteuser:this.state.usuario,concretepasswd:this.state.contrasenya, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:catAEnviar};

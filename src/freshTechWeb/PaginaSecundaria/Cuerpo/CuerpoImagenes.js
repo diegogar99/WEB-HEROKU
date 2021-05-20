@@ -691,7 +691,9 @@ class CuerpoImagenes extends React.Component {
             <div className="contenidoList">
               <img className="cajaImg" src={ "https://fresh-techh.herokuapp.com/"+data.nombre+".jpg"} alt="cajaFuerte" />
               <pre><label>       </label></pre>
-              <p id={data.nombre} className="nombreItemImg">{data.nombre}</p>
+              <div className="contenedorNombreImg">
+                <p id={data.nombre} className="nombreItemImg">{data.nombre}</p>
+              </div>
               <p className="fechasImg">Fecha creación: {data.fechacreacion}<br></br>
                   Fecha caducidad: {data.fechacaducidad}
               </p>

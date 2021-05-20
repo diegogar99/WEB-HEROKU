@@ -654,9 +654,9 @@ class CuerpoDocumentos extends React.Component {
           <li key={data.nombre} className="collection-item avatar">
             <i className="material-icons iconoShow circle red">picture_as_pdf</i>
             <div className="contenidoList">
-              
-              <p id={data.nombre} className="nombreItem">{data.nombre}</p>
-              
+            <div className="contenedorNombreFile">
+              <p id={data.nombre} className="nombreItemFile">{data.nombre}</p>
+            </div>
               <p className="fechas">Fecha creación: {data.fechacreacion}<br></br>
                   Fecha caducidad: {data.fechacaducidad}
               </p>

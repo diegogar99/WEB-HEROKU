@@ -750,9 +750,9 @@ selectCategorias=async(value)=>{
           <li key={data.nombre} className="collection-item avatar">
             <i className="material-icons iconoShow circle green">lock</i>
             <div className="contenidoList">
-              
+            <div className="botonesEditDelUserPasswd">
               <p id={data.nombre} className="nombreItem">{data.nombre}</p>
-              
+            </div>
               <p className="fechas">Fecha creación: {data.fechacreacion}<br></br>
                   Fecha caducidad: {data.fechacaducidad}
               </p>

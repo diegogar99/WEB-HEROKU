@@ -805,7 +805,7 @@ input::placeholder{
   margin-top: 1% !important;
 }
 .botonesEditDelImg{
-  margin-left: 10% !important;
+  margin-left: 5% !important;
   margin-top: 2% !important;
 }
 .botonDel{
@@ -820,10 +820,17 @@ input::placeholder{
   font-weight: 800;
   margin-top: 1% !important;
 }
-.nombreItemImg{
+.nombreItemFile{
   font-size: 20px;
   font-weight: 800;
-  margin-top: 3% !important;
+  margin-top: 15% !important;
+}
+.nombreItemImg{
+  
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 50% !important;
+ 
 }
 .fechas{
   margin-top: 0.5% !important;
@@ -905,10 +912,31 @@ input::placeholder{
 }
 .tituloSeguridad{
   font-weight: 800;
-  
-  
+}
+
+.contenedorNombreImg{
+  white-space: nowrap;
+  overflow: scroll;
+  text-overflow: ellipsis;
+  max-width: 90px;
   
 }
+.contenedorNombreFile{
+  white-space: nowrap;
+  overflow: scroll;
+  text-overflow: ellipsis;
+  max-width: 100px;
+  
+}
+.contenedorNombreUserPasswd{
+  white-space: nowrap;
+  overflow: scroll;
+  text-overflow: ellipsis;
+  max-width: 120px;
+  
+}
+
+
 /*input[type=password]{
   width: 124% !important;
   margin-left: auto !important;

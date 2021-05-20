@@ -430,7 +430,7 @@ selectCategorias=async(value)=>{
      
      
       
-      {/*this.contraEdit.usuario=response.data.concreteuser;
+      this.contraEdit.usuario=response.data.concreteuser;
       this.contraEdit.activacion=response.data.fechacreacion;
       this.contraEdit.caducidad=response.data.fechacaducidad;
       this.contraEdit.contrasenya=response.data.concretpasswd;
@@ -443,7 +443,7 @@ selectCategorias=async(value)=>{
         this.contraEdit.categoria=response.data.categoria;
       }
       
-      let array = this.state.listadoCategorias;
+     {/* let array = this.state.listadoCategorias;
       if(array.length > 0){
         this.copiaLista.listaCopia = array.map((data) => data.nombrecat);
       }else{

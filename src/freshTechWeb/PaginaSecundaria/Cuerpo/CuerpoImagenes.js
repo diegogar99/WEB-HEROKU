@@ -78,6 +78,9 @@ const validate = values =>{
   if (!values.expiracionImg || !/[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]/.test(values.expiracionImg)||!compararFechas(values.creacionImg,values.expiracionImg) || !verificarFecha(values.expiracionImg)){
     errors.expiracionImg = 'Introduzca fecha válida'
   }
+  if(!values.imgCreate){
+    errors.imgCreate="Selecciona una imagen";
+  }
   return errors
 }
 
@@ -139,6 +142,8 @@ class CuerpoImagenes extends React.Component {
       nombreAnterior:'',
       imgShow: '',
       imgUrl:'',
+      imgCreate:'',
+     
     }
     this.imgEdit={
       nombre:'',
@@ -519,8 +524,8 @@ class CuerpoImagenes extends React.Component {
     console.log("imagen: ",img);
 
     if (img) {
-    
-      this.data.set('image', img);
+      this.setState({errors:{},imgCreate:img},() =>  this.data.set('image', img));
+     
 
     }else{
       alert("Selecciona una imagen")
@@ -733,6 +738,8 @@ class CuerpoImagenes extends React.Component {
                   <i className="material-icons prefix">event_busy</i>
                   <input type="date" name="expiracionImg"id="expiracionImg" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange}/>
                   {errors.expiracionImg && <p className="warning">{errors.expiracionImg}</p>}
+                  {errors.imgCreate && <p className="warning">{errors.imgCreate}</p>}
+
                 </div>   
            
                

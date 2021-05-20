@@ -77,6 +77,9 @@ const validate = values =>{
   if (!values.expiracionFile || !/[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]/.test(values.expiracionFile)||!compararFechas(values.creacionImg,values.expiracionFile) || !verificarFecha(values.expiracionFile)){
     errors.expiracionFile = 'Introduzca fecha válida'
   }
+  if(!values.fileCreate){
+    errors.fileCreate="Selecciona un documento";
+  }
   return errors
 }
 
@@ -138,6 +141,7 @@ class CuerpoDocumentos extends React.Component {
       nombreAnterior:'',
       imgShow: '',
       imgUrl:'',
+      fileCreate:'',
     }
     this.fileEdit={
       nombre:'',
@@ -390,7 +394,7 @@ class CuerpoDocumentos extends React.Component {
       console.log("ACTUALIZO: ", response.data);
       this.setState({cargaContenido:true},() => this.togglePopup2());
       localStorage.removeItem('categoria');
-      window.location.reload();
+      //window.location.reload();
       
     })
     .catch(error=>{
@@ -407,10 +411,12 @@ class CuerpoDocumentos extends React.Component {
 
     this.dataFileFileEdit.set('nuevoNombre', this.state.nombreFile);
     //this.dataFileFileEdit.set('categoria', value);
+    console.log("VAL EDIT: ",value);
     if(value== null){
       
       if((this.copiaLista.listaCopia[0] != "Sin categoría") && (this.copiaLista.listaCopia[0] != "sin categorias disponibles")){
         this.dataFileFileEdit.set('categoria', this.copiaLista.listaCopia[0]);
+        console.log("NO1: ",this.copiaLista.listaCopia);
       }
     }
     else if((value != "Sin categoría") && (value != "sin categorias disponibles")){
@@ -469,9 +475,10 @@ class CuerpoDocumentos extends React.Component {
     }else{
       this.dataFile.delete('categoria');
     }
-    console.log("CATEGORIA ENVIADA: ", localStorage.getItem('categoria'));
+    console.log("FICHERO ENVIADO: ", localStorage.getItem('file'));
     this.dataFile.set('fechacreacion', this.state.creacionImg);
     this.dataFile.set('fechacaducidad', this.state.expiracionFile);
+    
     this.sendFile(this.state.token,this.dataFile);
 
   }
@@ -483,13 +490,16 @@ class CuerpoDocumentos extends React.Component {
   //SUBIR FICHERO AL CREAR NUEVO
   subirFile(e){
     let img = e.target.files[0];
-    console.log("imagen: ",img);
+    
 
     if (img) {
-
-      this.dataFile.set('file', img);
+      console.log("imagen: ",img);
+      this.setState({errors:{},fileCreate:img},() =>  this.dataFile.set('file', img));
+    
       
     }else{
+      
+
       alert("Selecciona una imagen")
     }
   }
@@ -565,7 +575,7 @@ class CuerpoDocumentos extends React.Component {
     const {errors, ...sinErrors} = this.state
     const result = validate(sinErrors)
     this.setState({errors:result})
-  
+    
     if(!Object.keys(result).length){ //Si tiene propiedades, hay error
       //Envio formulario
       console.log('Formulario válido')
@@ -697,6 +707,8 @@ class CuerpoDocumentos extends React.Component {
                   <i className="material-icons prefix">event_busy</i>
                   <input type="date" name="expiracionFile"id="expiracionFile" placeholder={"Fecha de caducidad: DD-MM-YYYY"} onChange={this.handleChange}/>
                   {errors.expiracionFile && <p className="warning">{errors.expiracionFile}</p>}
+                  {errors.fileCreate && <p className="warning">{errors.fileCreate}</p>}
+                  
                 </div>
 
 

@@ -10,11 +10,6 @@ import axios from 'axios';
 import 'materialize-css/dist/css/materialize.min.css'
 
 
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-//FUNCIONES AUXILIARES PARA GESTIONAR FECHAS Y ERRORES
-
 function fecha(){
   var actual= new Date();
 
@@ -32,6 +27,7 @@ function fecha(){
     resMes = "0"+resMes;
   }
 
+  //this.setState=({fecha_actual:actual});
   return resDia+"-"+resMes+"-"+resAnyo;
 }
 
@@ -89,31 +85,6 @@ function compararFechas(fecha1,fecha2){
   return fechaAct < fechaCad;
 
 }
-
-//Busca elemento en lista y devuelve indice o -1 si no está
-function buscar(lista,elemento){
-  var i;
-  for(i=0; i< lista.length; i++){
-    if(lista[i] == elemento){
-      return i;
-    }
-  }
-  return -1;
-}
-
-//Permuta dos elementos de una lista
-function permuta(indice1, indice2, lista){
-  var elemento = lista[indice1];
-  lista[indice1] = lista[indice2];
-  lista[indice2] = elemento;
-  return lista;
-}
-
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-
-//CLASE CUERPODOIMAGENES
 class CuerpoImagenes extends React.Component {
 
   constructor(props){
@@ -130,7 +101,7 @@ class CuerpoImagenes extends React.Component {
       cargaContenido:true,
       token: localStorage.getItem('token'),
       listadoCategorias:[],
-      categoria:localStorage.getItem('categoria'),
+      categoria:'cat',
       vacio:true,
       ordenarPor:localStorage.getItem('ordenarPor'),
       ordenarDe:localStorage.getItem('ordenarDe'),
@@ -159,15 +130,10 @@ class CuerpoImagenes extends React.Component {
     }
   }
 
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-//AXIOS CONEXION CON API
-
-
-//SELECT CATEGORIAS
   selectCategorias=async(value)=>{
     console.log("ENTRAAA2");
+    //const query = {ordenarPor:this.state.ordenarPor,ordenarDe:this.state.ordenarDe};
+    //const headers = {'Authorization':`Bearer ${value}`};
     const config = {
       headers: {'Authorization':`Bearer ${value}`},
     }
@@ -175,18 +141,9 @@ class CuerpoImagenes extends React.Component {
     )
     .then(response =>{
       console.log(response.data);
-      var categoriasList = response.data;
-      
-      if(categoriasList.length >0){
-        categoriasList[categoriasList.length] = {nombrecat:"Sin categoría"};
-      }
-      
-      this.setState({listadoCategorias:categoriasList,cargaContenido:false});
-   
+      this.setState({listadoCategorias:response.data,cargaContenido:false});
     })
   }
-
-//CREO NUEVO IMAGEN
 
   sendImg=async(value1,value2)=>{
     
@@ -196,11 +153,14 @@ class CuerpoImagenes extends React.Component {
     .then(response =>{
       console.log(response.data);
       this.setState({cargaContenido:true},() => this.togglePopup());
-      localStorage.removeItem('categoria');
+      /*this.data.delete('image');
+      this.data.delete('nombre');
+      this.data.delete('categoria');
+      this.data.delete('fechacreacion');
+      this.data.delete('fechacaducidad');*/
     })
   }
 
-//ELIMINO IMAGEN EXISTENTE
 
   eliminarImg=async(value1,value2)=>{
     console.log("ENTRAAA4");
@@ -223,9 +183,6 @@ class CuerpoImagenes extends React.Component {
      
     })
   }
-
-  //SELECCIONO IMAGENES PARA MOSTRARLAS
-
   selectImagenes=async(value)=>{
     var lista = [];
     var indice = 0;
@@ -251,6 +208,8 @@ class CuerpoImagenes extends React.Component {
     }
     console.log("Ordenar por img: ",orden);
     console.log("Ordenar de img: ",ordenarde);
+    //const query = {ordenarPor:this.state.ordenarPor,ordenarDe:this.state.ordenarDe};
+    //const headers = {'Authorization':`Bearer ${value}`};
     const config = {
       headers: {'Authorization':`Bearer ${value}`},
       params:{ordenarPor:orden,ordenarDe:ordenarde}
@@ -273,11 +232,14 @@ class CuerpoImagenes extends React.Component {
         this.setState({vacio:false});
       }
       
-        this.setState({listadoImagenes:lista,cargaContenido:false,cargando:false});
+        this.setState({listadoImagenes:lista,cargaContenido:false,cargando:false},() =>this.cargarImagenes());
     })
   }
-
-  //GET PIC PARA VISUALIZAR IMAGEN
+  cargarImagenes(){
+    for(var i = 0; i < this.state.listadoImagenes.length;i++){
+      this.showImgs(this.state.listadoImagenes[i].nombre,this.state.token);
+    }
+  }
   showImgs=async(value1,value2)=>{
 
     await axios.get('https://fresh-techh.herokuapp.com/getPic',{params:{nombre:`${value1}`},headers:{'Authorization':`Bearer ${value2}`}}
@@ -294,7 +256,6 @@ class CuerpoImagenes extends React.Component {
     })
   }
 
-  //GET PIC PARA VISUALIZAR IMAGEN2
 
   selectImgDetails=async(value1,value2)=>{
 
@@ -309,34 +270,51 @@ class CuerpoImagenes extends React.Component {
       this.imgEdit.categoria=response.data.categoria;
       this.imgEdit.nombre=value1;
       
-      if(response.data.categoria == null){
-        this.imgEdit.categoria="Sin categoría"
-      }else{
-        this.imgEdit.categoria=response.data.categoria;
-      }
       
       let array = this.state.listadoCategorias;
+      console.log("LISTADO: ",this.state.listadoCategorias);
       if(array.length > 0){
-        this.copiaLista.listaCopia = array.map((data) => data.nombrecat);
-      }else{
-        if(this.imgEdit.categoria == null){
-          this.copiaLista.listaCopia[0] =  "Sin categoría";
-        }else{
-          this.copiaLista.listaCopia[0] =  this.imgEdit.categoria;
-        }
+        this.miListaC.listaC = array.map((data) => data.nombrecat);
       }
-      if(this.copiaLista.listaCopia[0] == "sin categorias disponibles"){
-        this.copiaLista.listaCopia[0] =  this.imgEdit.categoria;
-      }else{
-
-        var indiceElemento = buscar( this.copiaLista.listaCopia,this.imgEdit.categoria);
-        if(indiceElemento == -1){
-          this.copiaLista.listaCopia[this.copiaLista.listaCopia.length] = this.copiaLista.listaCopia[0];
+      console.log("ORIGINAL: ",  this.miListaC.listaC);
+      var longitud = (this.miListaC.listaC.length) + 1;
+      var elemento = this.miListaC.listaC[0];
+      var existe = false;
+      var id = 0;
+     
+      for (var i= 0; i < this.miListaC.listaC.length; i++){
+        this.copiaLista.listaCopia[i] = this.miListaC.listaC[i];
+        if(elemento != "sin categorias disponibles"){
+          if(this.copiaLista.listaCopia[i] == this.imgEdit.categoria){
+            existe = true;
+            id = i;
+          }
+        }
+      } 
+      
+ 
+        if (elemento == "sin categorias disponibles"){
+          console.log("NANAI");
           this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
+ 
         }else{
-          this.copiaLista.listaCopia = permuta(0, indiceElemento,this.copiaLista.listaCopia);
+          if (existe){
+            console.log("EXISTE");
+            this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
+            this.copiaLista.listaCopia[id] = elemento;
+          }else{
+            console.log("NO EXISTE");
+            this.copiaLista.listaCopia[0] = this.imgEdit.categoria;
+            this.copiaLista.listaCopia[longitud] = elemento;
+          }
+      
         }
-      }
+        
+      
+      
+      
+     
+      
       
       this.togglePopup2();
       
@@ -347,32 +325,7 @@ class CuerpoImagenes extends React.Component {
       console.log("error");
     })
   }
-
- //DESCARGAR IMAGEN
- descargar=async(value)=>{
-  axios({
-    url: value,
-    method:"GET",
-    responseType:"arraybuffer",
-    headers: {
-      'Content-Type': 'audio/mpeg'
-    }
-  })
-  .then(responseDownload =>{
-    const url = window.URL.createObjectURL(new Blob([responseDownload.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download",value);
-    document.body.appendChild(link);
-    link.click();
-  })
-.catch(error=> {
-  console.log(error.message);
-})
-
-}
-//EDITAR IMAGEN NO SE USA
-
+ 
   actualizarImg=async(value1,value2)=>{
     console.log("Token: ", value2);
     console.log("NombreAnt: ", this.state.nombreAnterior);
@@ -396,10 +349,6 @@ class CuerpoImagenes extends React.Component {
       console.log(error.response);
     })
   }
-
-
-//EDITAR IMAGEN 2
-
   actualizImg=async(value1,value2)=>{
     console.log("Token: ", value2);
     console.log("NombreAnt: ", this.state.nombreAnterior);
@@ -416,7 +365,6 @@ class CuerpoImagenes extends React.Component {
     .then(response =>{
       console.log("ACTUALIZO: ", response.data);
       this.setState({cargaContenido:true},() => this.togglePopup2());
-      localStorage.removeItem('categoria');
       window.location.reload();
       
     })
@@ -424,15 +372,6 @@ class CuerpoImagenes extends React.Component {
       console.log(error.response);
     })
   }
-
-
-  ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-
-  //FUNCIONES QUE USAN LAS AXIOS
-
-  //EDITA IMAGEN
   actualizar(value){
 
     this.dataImgEdit.set('nuevoNombre', this.state.nombreImg);
@@ -445,13 +384,53 @@ class CuerpoImagenes extends React.Component {
 
   }
 
-//ELIMINA IMAGEN
+  descargar=async(value)=>{
+    axios({
+      url: value,
+      method:"GET",
+      responseType:"arraybuffer",
+      headers: {
+        'Content-Type': 'audio/mpeg'
+      }
+    })
+    .then(responseDownload =>{
+      const url = window.URL.createObjectURL(new Blob([responseDownload.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download",value);
+      document.body.appendChild(link);
+      link.click();
+    })
+  .catch(error=> {
+    console.log(error.message);
+  })
+
+  }
+
+
+  /*obtenerImagen=async(value)=>{
+    console.log("OBTENER");
+    var nombre = "https://fresh-techh.herokuapp.com/"+this.imgEdit.nombre+ ".jpg";
+    
+    await axios.get(nombre
+    )
+    .then(response =>{
+      console.log("IMAGEN: ", response.data);
+      this.imgEdit.url=response.data;
+      this.togglePopup5();
+    })
+    .catch(error=>{
+      console.log(error.response);
+    })
+  }*/
+
+
+
   eliminar=e=>{
     console.log("ENTRAAA3");
     var img = e.currentTarget.id;
     this.eliminarImg(this.state.token,img);
   }
-//SELECCIONA IMAGEN
 
   select =e =>{
     e.preventDefault();
@@ -459,84 +438,64 @@ class CuerpoImagenes extends React.Component {
     var img = e.currentTarget.id;
     this.selectImgDetails(img,this.state.token);
   }
-
-  //DESCARGAR IMAGEN
   download =e =>{
     e.preventDefault();
     var nombre = e.currentTarget.id;
     this.descargar("https://fresh-techh.herokuapp.com/"+nombre+".jpg");
     
   }
-
-//CREAR IMAGEN NUEVA
  
-  enviarImg(e){
-    
-    console.log('nombre', this.state.nombreImg);
-    console.log('fechacaducidad', this.state.expiracionImg);
-    this.data.set('nombre', this.state.nombreImg);
 
-    if(localStorage.getItem('categoria') == null){
-      console.log("NO1");
-      if((this.miListaC.listaC[0] != "Sin categoría") && (this.miListaC.listaC[0] != "sin categorias disponibles")){
-        this.data.set('categoria', this.miListaC.listaC[0]);
-       
-      }
-    }
-    else if((localStorage.getItem('categoria') != "Sin categoría") && (localStorage.getItem('categoria') != "sin categorias disponibles")){
-      console.log("NO2");
-      this.data.set('categoria', localStorage.getItem('categoria'));
-    }else{
-      this.data.delete('categoria');
-    }
+  handleChange = ({target}) => {
+    const{name,value} = target
+    this.setState({[name]:value})
    
-    this.data.set('fechacreacion', this.state.creacionImg);
-    this.data.set('fechacaducidad', this.state.expiracionImg);
-    this.sendImg(this.state.token,this.data);
-
   }
-
-  ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-  //IMAGENES
-  //SUBIR IMAGEN AL CREAR NUEVO
-
   subirImagen(e){
     let img = e.target.files[0];
     console.log("imagen: ",img);
 
     if (img) {
-    
+      //let data = new FormData();
       this.data.set('image', img);
-
+      
+      //VERIFICO QUE TYPE ES IMAGEN (PNG O JPG), SINO ERROR
+      //axios.post('/files', data)...
+      //this.sendImg(this.state.token,data);
     }else{
       alert("Selecciona una imagen")
     }
   }
-
-  //SUBIR IAMAGEN AL EDITAR 
 
   subirImagenEdit(e){
     let img = e.target.files[0];
     console.log("imagen: ",img);
 
     if (img) {
-
+      //let data = new FormData();
       this.dataImgEdit.set('image', img);
       this.dataImgEdit.set('actualizaImagen', 'si');
- 
+      //VERIFICO QUE TYPE ES IMAGEN (PNG O JPG), SINO ERROR
+      //axios.post('/files', data)...
+      //this.sendImg(this.state.token,data);
     }else{
       this.dataImgEdit.set('actualizaImagen', 'no');
       alert("Selecciona una imagen")
     }
   }
  
-  
- ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-  //POPUPS
+  enviarImg(e){
+    
+    console.log('nombre', this.state.nombreImg);
+    console.log('fechacaducidad', this.state.expiracionImg);
+    this.data.set('nombre', this.state.nombreImg);
+    this.data.set('categoria', this.state.categoria);
+    this.data.set('fechacreacion', this.state.creacionImg);
+    this.data.set('fechacaducidad', this.state.expiracionImg);
+    this.sendImg(this.state.token,this.data);
+
+  }
+
 
   togglePopup() {
     this.setState({
@@ -568,19 +527,9 @@ class CuerpoImagenes extends React.Component {
     
   }
 
-///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
 
-  //HANDLE CHANGE
 
-  handleChange = ({target}) => {
-    const{name,value} = target
-    this.setState({[name]:value})
-   
-  }
 
-  //FORMULARIOS SUBMIT
 
   handleSubmit =e => {
     e.preventDefault()
@@ -602,14 +551,11 @@ class CuerpoImagenes extends React.Component {
 
     var cat = localStorage.getItem('categoria');
     this.actualizar(cat);
+    //this.actualizarImg(cat,this.state.token);
     
+
   }
 
- ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////
-
-  //LISTA CATEGORIAS
 
   miListaC={
     listaC:["sin categorias disponibles"]

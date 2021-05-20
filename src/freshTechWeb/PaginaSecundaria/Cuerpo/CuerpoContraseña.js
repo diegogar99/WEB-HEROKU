@@ -12,6 +12,12 @@ import axios from 'axios';
 import { createSvgIcon } from '@material-ui/core'
 import 'materialize-css/dist/css/materialize.min.css'
 
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//FUNCIONES AUXILIARES PARA GESTIONAR FECHAS Y ERRORES
+
 function compararFechas(fecha1,fecha2){
 
   var fechaAct = Number(fecha1.split("-").reverse().join("-").replace(/-/g,""));
@@ -99,10 +105,33 @@ function fecha(){
     resMes = "0"+resMes;
   }
 
-  //this.setState=({fecha_actual:actual});
   return resDia+"-"+resMes+"-"+resAnyo;
 }
 
+//Busca elemento en lista y devuelve indice o -1 si no está
+function buscar(lista,elemento){
+  var i;
+  for(i=0; i< lista.length; i++){
+    if(lista[i] == elemento){
+      return i;
+    }
+  }
+  return -1;
+}
+
+//Permuta dos elementos de una lista
+function permuta(indice1, indice2, lista){
+  var elemento = lista[indice1];
+  lista[indice1] = lista[indice2];
+  lista[indice2] = elemento;
+  return lista;
+}
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+//CLASE CUERPOCONTRSEÑAS
 class CuerpoContraseña extends React.Component {
 
   constructor(props){
@@ -162,242 +191,12 @@ class CuerpoContraseña extends React.Component {
 
     
   }
-  generarContrasenyaDebil =e =>{
-    this.setState({tipo:"debil"});
-
-  }
-  generarContrasenyaMedia =e =>{
-    this.setState({tipo:"media"});
-
-  }
-  generarContrasenyaFuerte =e =>{
-    this.setState({tipo:"fuerte"});
-
-  }
-  crearContrasenya=async(value)=>{
- 
-    const datos = {concreteuser:this.state.usuario,concretepasswd:this.state.contrasenya, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:localStorage.getItem('categoria')};
-    const headers = {'Authorization':`Bearer ${value}`};
-    await axios.post('https://fresh-techh.herokuapp.com/passwd',datos,{headers}
-    )
-    .then(response =>{
-      
-      this.setState({cargaContenido:true});
-      this.togglePopup();
-    })
-  
-  }
-
-  selectContrasenyasName=async(value)=>{
-    var lista = [];
-    var indice = 0;
-    var orden = '';
-    var ordenarde ='';
-    console.log("Ordenar por: ",this.state.ordenarPor);
-    console.log("Ordenar de: ",this.state.ordenarDe);
-    if(this.state.ordenarPor == "Nombre"){
-      orden = "nombre";
-    }else if(this.state.ordenarPor == "Fecha de creación"){
-      orden = "fechacreacion";
-    }else if(this.state.ordenarPor == "undefined"){
-      orden = "nombre";
-    }else if(this.state.ordenarPor == null || this.state.ordenarPor == "null"){
-      orden = "nombre";
-
-    }else{
-      orden = "fechacaducidad";
-    }
-    if(this.state.ordenarDe == null){
-      ordenarde = "ASC";
-    }else{
-      ordenarde = this.state.ordenarDe;
-    }
-    //const query = {ordenarPor:this.state.ordenarPor,ordenarDe:this.state.ordenarDe};
-    //const headers = {'Authorization':`Bearer ${value}`};
-    const config = {
-      headers: {'Authorization':`Bearer ${value}`},
-      params:{ordenarPor:orden,ordenarDe:ordenarde}
-    }
-    await axios.get('https://fresh-techh.herokuapp.com/passwdUser',config
-    )
-    .then(response =>{
-      console.log("RespuestaSelect: ", response.data);
-      
-      
-      for(var i=0; i < response.data.length;i++){
-       if(response.data[i].tipo == "usuario-passwd"){
-         
-         lista[indice] = response.data[i];
-         indice = indice + 1;
-       }
-      }
-      if(lista.length == 0){
-        this.setState({vacio:true});
-      }else{
-        this.setState({vacio:false});
-      }
-      this.setState({listadoContrasenyas:lista,cargaContenido:false,cargando:false});
-    })
-  
-  }
-
-  selectCategorias=async(value)=>{
-   
-    //const query = {ordenarPor:this.state.ordenarPor,ordenarDe:this.state.ordenarDe};
-    //const headers = {'Authorization':`Bearer ${value}`};
-    const config = {
-      headers: {'Authorization':`Bearer ${value}`},
-    }
-    await axios.get('https://fresh-techh.herokuapp.com/getcat',config
-    )
-    .then(response =>{
-  
-    
-      this.setState({listadoCategorias:response.data,cargaContenido:false});
-    })
-  }
-
-  selectPasswdDetails=async(value1,value2)=>{
-
-    
-    await axios.get('https://fresh-techh.herokuapp.com/detailspasswd',{params:{nombre:`${value1}`},headers:{'Authorization':`Bearer ${value2}`}}
-    )
-    .then(response =>{
-     
-      let array = this.state.listadoCategorias;
-      if(array.length > 0){
-        this.miListaC.listaC = array.map((data) => data.nombrecat);
-      }
-      
-     
-      this.contraEdit.categoria=response.data.categoria;
-      this.contraEdit.usuario=response.data.concreteuser;
-      this.contraEdit.activacion=response.data.fechacreacion;
-      this.contraEdit.caducidad=response.data.fechacaducidad;
-      this.contraEdit.contrasenya=response.data.concretpasswd;
-      this.contraEdit.url=response.data.dominio;
-      this.contraEdit.nombre=value1;
-      var longitud = (this.miListaC.listaC.length) + 1;
-      var elemento = this.miListaC.listaC[0];
-      var existe = false;
-      var id = 0;
-      this.setState({fecha_actual:this.contraEdit.activacion,contrasenyaEdit:this.contraEdit.contrasenya});
-
-      for (var i= 0; i < this.miListaC.listaC.length; i++){
-        this.copiaLista.listaCopia[i] = this.miListaC.listaC[i];
-        if(elemento != "sin categorias disponibles"){
-          if(this.copiaLista.listaCopia[i] == this.contraEdit.categoria){
-            
-            existe = true;
-            id = i;
-          }
-        }
-      } 
-      
- 
-        if (elemento == "sin categorias disponibles"){
-          
-          this.copiaLista.listaCopia[0] = this.contraEdit.categoria;
- 
-        }else{
-          if (existe){
-            this.copiaLista.listaCopia[0] = this.contraEdit.categoria;
-            this.copiaLista.listaCopia[id] = elemento;
-          }else{
-            this.copiaLista.listaCopia[0] = this.contraEdit.categoria;
-            this.copiaLista.listaCopia[longitud] = elemento;
-          }
-      
-        }
-        
-      
-      
-      
-      this.ordenarListaC();
-      this.togglePopup2();
-     
-    })
-    .catch(error=>{
-    
-    })
-  }
-
-  ordenarListaC(){
-    let cat = this.contraEdit.categoria;
-    let indice;
-    if(this.miListaC.listaC.length > 1){
-      for(var i = 0; i < this.miListaC.listaC.length; i++){
-        if(this.miListaC.listaC[i] == cat){
-          indice = i;
-        }
-      }
-      if(indice != 0 ){
-        this.miListaC.listaC[indice] = this.miListaC.listaC[indice-1];
-        this.miListaC.listaC[indice-1] = cat;
-      }
-
-    }
-    
-  }
 
 
-  deleteContrasenya=async(value1,value2)=>{
-  
-  
-    await axios.delete('https://fresh-techh.herokuapp.com/deletepasswd',{headers:{'Authorization':`Bearer ${value2}`},data:{nombre:`${value1}`}}
-    )
-    .then(response =>{
-      //window.location.reload(true);
-      this.setState({cargaContenido:true});
-    })
-    .catch(error=>{
-
-    })
-  }
-  actualizarContrasenya=async(value1,value2)=>{
-    console.log("Nombre: ", this.state.nombreAnterior);
-    console.log("Nombre: ", this.state.nombre);
-    console.log("Usuario: ", this.state.usuario);
-    console.log("Contrasenya: ", this.state.contrasenya);
-    console.log("URL: ", this.state.url);
-    console.log("Contrasenya: ", value1);
-    console.log("URL: ", this.state.fecha_caducidad);
-
-    
-    const datos = {nombrePassword:this.state.nombreAnterior,concreteuser:this.state.usuario,concretepasswd:this.state.contrasenyaEdit, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:value1};
-    const headers = {'Authorization':`Bearer ${value2}`};
-    await axios.post('https://fresh-techh.herokuapp.com/editpasswd',datos,{headers}
-    )
-    .then(response =>{
-      console.log(response.data);
-      this.setState({cargaContenido:true},() => this.togglePopup2());
-      
-      
-    })
-    .catch(error=>{
-  
-    })
-  }
-
-
-  delete =e =>{
-    e.preventDefault();
-
-    var pass = e.currentTarget.id;
-    this.deleteContrasenya(pass,this.state.token);
-    
-  }
-
-
-
-  select =e =>{
-    e.preventDefault();
-    var pass = e.currentTarget.id;
-    
-    this.selectPasswdDetails(pass,this.state.token);
-    
-  }
-
+   ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  //FUNCIONES CONTRASEÑAS
   comprobarPasswd = (e) => {
    
     if ((this.state.password == '' && this.state.contrasenya_avanzado == '') || (this.state.password != '' && this.state.contrasenya_avanzado != '')){
@@ -485,12 +284,287 @@ class CuerpoContraseña extends React.Component {
     this.setState({longitud:value}, () => { this.buildPassword();});
    
   }
+
+  generarContrasenyaDebil =e =>{
+    this.setState({tipo:"debil"});
+
+  }
+  generarContrasenyaMedia =e =>{
+    this.setState({tipo:"media"});
+
+  }
+  generarContrasenyaFuerte =e =>{
+    this.setState({tipo:"fuerte"});
+
+  }
+
+
+
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//AXIOS CONEXION CON API
+
+//SELECT CATEGORIAS
+
+selectCategorias=async(value)=>{
+   
+
+  const config = {
+    headers: {'Authorization':`Bearer ${value}`},
+  }
+  await axios.get('https://fresh-techh.herokuapp.com/getcat',config
+  )
+  .then(response =>{
+
+    var categoriasList = response.data;
+      
+      if(categoriasList.length >0){
+        categoriasList[categoriasList.length] = {nombrecat:"Sin categoría"};
+      }
+      
+      this.setState({listadoCategorias:categoriasList,cargaContenido:false});
+  })
+}
+
+
+//CREA USER-PASSWD
+  crearContrasenya=async(value)=>{
+    var catAEnviar=null;
+    if(localStorage.getItem('categoria') == null){
+      if((this.miListaC.listaC[0] != "Sin categoría") && (this.miListaC.listaC[0] != "sin categorias disponibles")){
+        catAEnviar = this.miListaC.listaC[0];
+      }
+    }
+    else if((localStorage.getItem('categoria') != "Sin categoría") && (localStorage.getItem('categoria') != "sin categorias disponibles")){
+      this.dataFile.set('categoria', localStorage.getItem('categoria'));
+      catAEnviar=localStorage.getItem('categoria');
+    }
+    const datos = {concreteuser:this.state.usuario,concretepasswd:this.state.contrasenya, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:catAEnviar};
+    const headers = {'Authorization':`Bearer ${value}`};
+    await axios.post('https://fresh-techh.herokuapp.com/passwd',datos,{headers}
+    )
+    .then(response =>{
+      
+      this.setState({cargaContenido:true},() => this.togglePopup());
+      
+      localStorage.removeItem('categoria');
+
+    })
+  
+  }
+
+  //SELECCIONA USER-PASSWD PARA MOSTRARLAS
+  selectContrasenyasName=async(value)=>{
+    var lista = [];
+    var indice = 0;
+    var orden = '';
+    var ordenarde ='';
+    console.log("Ordenar por: ",this.state.ordenarPor);
+    console.log("Ordenar de: ",this.state.ordenarDe);
+    if(this.state.ordenarPor == "Nombre"){
+      orden = "nombre";
+    }else if(this.state.ordenarPor == "Fecha de creación"){
+      orden = "fechacreacion";
+    }else if(this.state.ordenarPor == "undefined"){
+      orden = "nombre";
+    }else if(this.state.ordenarPor == null || this.state.ordenarPor == "null"){
+      orden = "nombre";
+
+    }else{
+      orden = "fechacaducidad";
+    }
+    if(this.state.ordenarDe == null){
+      ordenarde = "ASC";
+    }else{
+      ordenarde = this.state.ordenarDe;
+    }
+
+    const config = {
+      headers: {'Authorization':`Bearer ${value}`},
+      params:{ordenarPor:orden,ordenarDe:ordenarde}
+    }
+    await axios.get('https://fresh-techh.herokuapp.com/passwdUser',config
+    )
+    .then(response =>{
+      console.log("RespuestaSelect: ", response.data);
+      
+      
+      for(var i=0; i < response.data.length;i++){
+       if(response.data[i].tipo == "usuario-passwd"){
+         
+         lista[indice] = response.data[i];
+         indice = indice + 1;
+       }
+      }
+      if(lista.length == 0){
+        this.setState({vacio:true});
+      }else{
+        this.setState({vacio:false});
+      }
+      this.setState({listadoContrasenyas:lista,cargaContenido:false,cargando:false});
+    })
+  
+  }
+
+//SELECCIONA DETALLES DE UN USER-pASSWD PARA EDITARLO
+  selectPasswdDetails=async(value1,value2)=>{
+
+    
+    await axios.get('https://fresh-techh.herokuapp.com/detailspasswd',{params:{nombre:`${value1}`},headers:{'Authorization':`Bearer ${value2}`}}
+    )
+    .then(response =>{
+     
+      let array = this.state.listadoCategorias;
+      if(array.length > 0){
+        this.miListaC.listaC = array.map((data) => data.nombrecat);
+      }
+      
+     
+      
+      this.contraEdit.usuario=response.data.concreteuser;
+      this.contraEdit.activacion=response.data.fechacreacion;
+      this.contraEdit.caducidad=response.data.fechacaducidad;
+      this.contraEdit.contrasenya=response.data.concretpasswd;
+      this.contraEdit.url=response.data.dominio;
+      this.contraEdit.nombre=value1;
+
+      if(response.data.categoria == null){
+        this.contraEdit.categoria="Sin categoría"
+      }else{
+        this.contraEdit.categoria=response.data.categoria;
+      }
+      
+      let array = this.state.listadoCategorias;
+      if(array.length > 0){
+        this.copiaLista.listaCopia = array.map((data) => data.nombrecat);
+      }else{
+        if(this.contraEdit.categoria == null){
+          this.copiaLista.listaCopia[0] =  "Sin categoría";
+        }else{
+          this.copiaLista.listaCopia[0] =  this.contraEdit.categoria;
+        }
+      }
+      if(this.copiaLista.listaCopia[0] == "sin categorias disponibles"){
+        this.copiaLista.listaCopia[0] =  this.contraEdit.categoria;
+      }else{
+
+        var indiceElemento = buscar( this.copiaLista.listaCopia,this.contraEdit.categoria);
+        if(indiceElemento == -1){
+          this.copiaLista.listaCopia[this.copiaLista.listaCopia.length] = this.copiaLista.listaCopia[0];
+          this.copiaLista.listaCopia[0] = this.contraEdit.categoria;
+        }else{
+          this.copiaLista.listaCopia = permuta(0, indiceElemento,this.copiaLista.listaCopia);
+        }
+      }
+      this.togglePopup2();
+     
+    })
+ 
+  }
+
+
+//ELIMINA USER-PASSWD
+  deleteContrasenya=async(value1,value2)=>{
+  
+  
+    await axios.delete('https://fresh-techh.herokuapp.com/deletepasswd',{headers:{'Authorization':`Bearer ${value2}`},data:{nombre:`${value1}`}}
+    )
+    .then(response =>{
+      this.setState({cargaContenido:true});
+    })
+ 
+  }
+
+  //ACTUALIZA USER-PASSWD
+  actualizarContrasenya=async(value1,value2)=>{
+    console.log("Nombre: ", this.state.nombreAnterior);
+    console.log("Nombre: ", this.state.nombre);
+    console.log("Usuario: ", this.state.usuario);
+    console.log("Contrasenya: ", this.state.contrasenya);
+    console.log("URL: ", this.state.url);
+    console.log("Contrasenya: ", value1);
+    console.log("URL: ", this.state.fecha_caducidad);
+
+    
+    const datos = {nombrePassword:this.state.nombreAnterior,concreteuser:this.state.usuario,concretepasswd:this.state.contrasenyaEdit, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:value1};
+    const headers = {'Authorization':`Bearer ${value2}`};
+    await axios.post('https://fresh-techh.herokuapp.com/editpasswd',datos,{headers}
+    )
+    .then(response =>{
+      console.log(response.data);    
+      this.setState({cargaContenido:true},() => this.togglePopup2());
+      localStorage.removeItem('categoria');
+      
+      
+    })
+ 
+  }
+
+
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+
+  //FUNCIONES QUE USAN LAS AXIOS
+  //ELIMINA USER-PASSWD
+  delete =e =>{
+    e.preventDefault();
+
+    var pass = e.currentTarget.id;
+    this.deleteContrasenya(pass,this.state.token);
+    
+  }
+
+
+//SELECCIONA USER-PASSWD
+  select =e =>{
+    e.preventDefault();
+    var pass = e.currentTarget.id;
+    
+    this.selectPasswdDetails(pass,this.state.token);
+    
+  }
+
+
+
+
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  //FUNCIONES AUXILIARES
+  //MENSAJE DE ERROR
   mensaje(){
     
     return <span style={{color: 'red'}}>Copiado</span>
     
   }
-  
+  //NO SE USA
+  ordenarListaC(){
+    let cat = this.contraEdit.categoria;
+    let indice;
+    if(this.miListaC.listaC.length > 1){
+      for(var i = 0; i < this.miListaC.listaC.length; i++){
+        if(this.miListaC.listaC[i] == cat){
+          indice = i;
+        }
+      }
+      if(indice != 0 ){
+        this.miListaC.listaC[indice] = this.miListaC.listaC[indice-1];
+        this.miListaC.listaC[indice-1] = cat;
+      }
+
+    }
+    
+  }
+
+
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  //POPUPS
+
   togglePopup() {
     this.setState({
       showPopup: !this.state.showPopup,
@@ -547,11 +621,6 @@ class CuerpoContraseña extends React.Component {
       errorsC:{},
     });
     console.log("ANTES: ", this.contraEdit.nombre);
-    
-    
-
-
-    
   }
 
   
@@ -564,15 +633,12 @@ class CuerpoContraseña extends React.Component {
     });
   }
 
-  miListaV={
-    listaV:["Nombre","Fecha de creación", "Fecha de caducidad"]
-  }
-  miListaC={
-    listaC:["sin categorias disponibles"]
-  }
 
-  
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
 
+  //HANDLE CHANGE
 
   handleChange = ({target}) => {
     const{name,value} = target
@@ -580,14 +646,13 @@ class CuerpoContraseña extends React.Component {
 
   }
 
+ //FORMULARIOS SUBMIT
 
   handleSubmit =e => {
     e.preventDefault()
     //Así separo errors del resto de estado
     const {errors, ...sinErrors} = this.state
     const result = validate(sinErrors)
-    
-    
     this.setState({errors:result})
   
     if(!Object.keys(result).length){ //Si tiene propiedades, hay error
@@ -604,17 +669,24 @@ class CuerpoContraseña extends React.Component {
 
   handleSubmitEdit =e => {
     e.preventDefault()    
-
     var cat = localStorage.getItem('categoria');
-   
     this.actualizarContrasenya(cat,this.state.token);
-    
-
   }
 
 
   
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
 
+  //LISTA ORDENAR
+  miListaV={
+    listaV:["Nombre","Fecha de creación", "Fecha de caducidad"]
+  }
+  //LISTA CATEGORIAS
+  miListaC={
+    listaC:["sin categorias disponibles"]
+  }
   
 
 
@@ -631,9 +703,7 @@ class CuerpoContraseña extends React.Component {
       <div className="Filtro">
         <br></br><br></br>
         <div className="bloqueArray">
-          {/*<div className="filtro3">
-          <ArrayListJerarquia />
-          </div>*/}
+        
           <div className="filtro">
             <ArrayList tipo={false} valores={this.miListaV.listaV} contenido={"contrasenya"}/>
           </div>
@@ -694,35 +764,6 @@ class CuerpoContraseña extends React.Component {
         
     </>
   }
-      
-        {/*<pre><table className="tablaContrasenya">
-           <tbody>
-            <tr>
-              <td>
-                <img className="contrasenyasDePrueba" src={contrasenyas}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              <td>
-                <img className="contrasenyasDePrueba" src={contrasenyas}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              <td>
-                <img className="contrasenyasDePrueba" src={contrasenyas}/>
-                <br></br>
-                <input type='button' value='Editar'/>
-                <input type='button' value='Eliminar'/>
-              </td>
-              
-            </tr>
-           </tbody>
-    </table></pre>*/}
-
-      
-
       
       {this.state.showPopup ? 
           <Popup
@@ -872,101 +913,7 @@ class CuerpoContraseña extends React.Component {
                 <input type='button' className="btn waves-effect waves-light" value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
                   </div>
               </form>
-             
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* 
-
-
-
-                  <pre>
-                  <form onSubmit={this.handleSubmitEdit}>
-                   
-                   <div  className="array"><ArrayList tipo={true} valores={this.copiaLista.listaCopia}/></div>
-              
-                   <br></br>
-
-               
-             
-                  <label htmlFor="nombre">Nombre                </label>
-                    <input ref={this.nombre} type="text" name="nombre"id="nombre" onChange={this.handleChange} defaultValue={this.contraEdit.nombre}/>
-                {errors.nombre && <p className="warning">{errors.nombre}</p>}
-    
-                    <br/>
-                    <label htmlFor="url">URL                   </label>
-                    <input ref={this.dominio} type="text" name="url"id="url" onChange={this.handleChange} defaultValue={this.contraEdit.url}/>
-                    {errors.url && <p className="warning">{errors.url}</p>}
-    
-                    <br/>
-                    <label htmlFor="usuario">Usuario               </label>
-                    <input ref={this.usuario} type="text" name="usuario"id="usuario" onChange={this.handleChange} defaultValue={this.contraEdit.usuario}/>
-                    {errors.usuario && <p className="warning">{errors.usuario}</p>}
-    
-                    <br/>
-                    <label className="passwdControl" htmlFor="contrasenyaEdit">                          Contraseña
-                      <label>            </label>
-                      <input ref={this.passwd} type='text' name = "contrasenyaEdit"id="contrasenyaEdit" onChange={this.handleChange} value={avanzado ? this.state.contrasenya:undefined}  defaultValue={this.contraEdit.contrasenya}/>
-                      <label> </label>
-                      <input type="button" className="editButton" onClick={this.togglePopup4.bind(this)}/>
-                    </label>
-                  
-                    <PasswordStrengthMeter password = {this.state.contrasenyaEdit}/>
-                    {errors.contrasenyaEdit && <p className="warning">{errors.contrasenyaEdit}</p>}
-
-                    <br/>
-                  
-                    <label htmlFor="fecha_actual">Fecha de activación   </label>
-                    <input ref={this.creacion} type="date" name="fecha_actual"id="fecha_actual" value={this.state.fecha_actual} onChange={this.handleChange} readOnly/>
-                    {errors.fecha_actual && <p className="warning">{errors.fecha_actual}</p>}
-    
-                    <br/>
-                    
-                    <label htmlFor="fecha_caducidad">Fecha de caducidad    </label>
-                    <input ref={this.caducidad} type="date" name="fecha_caducidad"id="fecha_caducidad" placeholder={"DD-MM-YYYY"} onChange={this.handleChange} defaultValue={this.contraEdit.caducidad}/>
-                    
-                    {errors.fecha_caducidad && <p className="warning">{errors.fecha_caducidad}</p>}
-    
-                    <br/>
-                    <input type='submit' className="Send" value='Actualizar'/>
-                    <input type='button' className="Close" value='Cerrar' onClick={this.togglePopup2.bind(this)}/>
-    
-                  </form>
-                  </pre>*/}
-                    </>
+                </>
                 }
               />
               :null
@@ -978,12 +925,7 @@ class CuerpoContraseña extends React.Component {
                   <>
 
                   <div className="meter1">
-                    {/*<strong>Escribe una contraseña</strong>
-                    <br></br>
-                    <input autoComplete="off" type="password" onChange={e => this.setState({ password: e.target.value,copied:false})} />
-                    <CopyToClipboard text={password} onCopy={e => this.setState({ copied1:true})}><button className="copyTC">Copiar</button></CopyToClipboard>
-                    {copied1 ? this.mensaje(): null}
-                    <PasswordStrengthMeter password = {password}/>*/}
+            
                     
                     <br/>
                   

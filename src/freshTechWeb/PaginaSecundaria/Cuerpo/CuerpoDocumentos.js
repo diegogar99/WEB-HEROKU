@@ -406,7 +406,19 @@ class CuerpoDocumentos extends React.Component {
   actualizar(value){
 
     this.dataFileFileEdit.set('nuevoNombre', this.state.nombreFile);
-    this.dataFileFileEdit.set('categoria', value);
+    //this.dataFileFileEdit.set('categoria', value);
+    if(value== null){
+      
+      if((this.copiaLista.listaCopia[0] != "Sin categoría") && (this.copiaLista.listaCopia[0] != "sin categorias disponibles")){
+        this.dataFileFileEdit.set('categoria', this.copiaLista.listaCopia[0]);
+      }
+    }
+    else if((value != "Sin categoría") && (value != "sin categorias disponibles")){
+   
+      this.dataFileFileEdit.set('categoria', value);
+    }else{
+      this.dataFileFileEdit.delete('categoria');
+    }
     this.dataFileFileEdit.set('fechacreacion', this.state.creacionImg);
     this.dataFileFileEdit.set('fechacaducidad', this.state.expiracionFile);
     this.dataFileFileEdit.set('nombreAntiguo', this.state.nombreAnterior);

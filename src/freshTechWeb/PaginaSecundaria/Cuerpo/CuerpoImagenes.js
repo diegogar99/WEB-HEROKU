@@ -436,7 +436,19 @@ class CuerpoImagenes extends React.Component {
   actualizar(value){
 
     this.dataImgEdit.set('nuevoNombre', this.state.nombreImg);
-    this.dataImgEdit.set('categoria', value);
+    //this.dataImgEdit.set('categoria', value);
+    if(value== null){
+      
+      if((this.copiaLista.listaCopia[0] != "Sin categoría") && (this.copiaLista.listaCopia[0] != "sin categorias disponibles")){
+        this.dataImgEdit.set('categoria', this.copiaLista.listaCopia[0]);
+      }
+    }
+    else if((value != "Sin categoría") && (value != "sin categorias disponibles")){
+   
+      this.dataImgEdit.set('categoria', value);
+    }else{
+      this.dataImgEdit.delete('categoria');
+    }
     this.dataImgEdit.set('fechacreacion', this.state.creacionImg);
     this.dataImgEdit.set('fechacaducidad', this.state.expiracionImg);
     this.dataImgEdit.set('nombreAntiguo', this.state.nombreAnterior);

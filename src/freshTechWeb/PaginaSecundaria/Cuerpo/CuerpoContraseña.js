@@ -494,9 +494,20 @@ selectCategorias=async(value)=>{
     console.log("URL: ", this.state.url);
     console.log("Contrasenya: ", value1);
     console.log("URL: ", this.state.fecha_caducidad);
+    
+    var catAEnviar=null;
+    if(value1 == null){
+      if((this.copiaLista.listaCopia[0] != "Sin categoría") && (this.copiaLista.listaCopia[0] != "sin categorias disponibles")){
+        catAEnviar = this.copiaLista.listaCopia[0];
+      }
+    }
+    else if((value1 != "Sin categoría") && (value1 != "sin categorias disponibles")){
+    
+      catAEnviar=value1;
+    }
 
     
-    const datos = {nombrePassword:this.state.nombreAnterior,concreteuser:this.state.usuario,concretepasswd:this.state.contrasenyaEdit, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:value1};
+    const datos = {nombrePassword:this.state.nombreAnterior,concreteuser:this.state.usuario,concretepasswd:this.state.contrasenyaEdit, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:catAEnviar};
     const headers = {'Authorization':`Bearer ${value2}`};
     await axios.post('https://fresh-techh.herokuapp.com/editpasswd',datos,{headers}
     )

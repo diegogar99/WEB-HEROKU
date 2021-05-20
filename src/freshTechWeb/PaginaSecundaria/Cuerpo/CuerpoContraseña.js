@@ -456,10 +456,10 @@ selectCategorias=async(value)=>{
       
       if(this.copiaLista.listaCopia[0] == "sin categorias disponibles"){
         this.copiaLista.listaCopia[0] =  this.contraEdit.categoria;
-      }{/* else{
+      }else{
 
         var indiceElemento = buscar( this.copiaLista.listaCopia,this.contraEdit.categoria);
-        if(indiceElemento == -1){
+        {/* if(indiceElemento == -1){
           this.copiaLista.listaCopia[this.copiaLista.listaCopia.length] = this.copiaLista.listaCopia[0];
           this.copiaLista.listaCopia[0] = this.contraEdit.categoria;
         }else{

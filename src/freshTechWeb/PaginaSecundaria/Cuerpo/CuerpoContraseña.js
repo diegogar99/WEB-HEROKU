@@ -443,7 +443,7 @@ selectCategorias=async(value)=>{
         this.contraEdit.categoria=response.data.categoria;
       }
       
-     {/* let array = this.state.listadoCategorias;
+     let array = this.state.listadoCategorias;
       if(array.length > 0){
         this.copiaLista.listaCopia = array.map((data) => data.nombrecat);
       }else{
@@ -453,6 +453,7 @@ selectCategorias=async(value)=>{
           this.copiaLista.listaCopia[0] =  this.contraEdit.categoria;
         }
       }
+      {/* 
       if(this.copiaLista.listaCopia[0] == "sin categorias disponibles"){
         this.copiaLista.listaCopia[0] =  this.contraEdit.categoria;
       }else{

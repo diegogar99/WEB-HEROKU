@@ -169,6 +169,8 @@ class CuerpoContraseña extends React.Component {
       vacio:true,
       nombreAnterior:'',
       cargando:true,
+      existe:false,
+
      
       
     }
@@ -351,10 +353,10 @@ selectCategorias=async(value)=>{
         console.log("SENDD");
       }
     }
-   /* else if((localStorage.getItem('categoria') != "Sin categoría") && (localStorage.getItem('categoria') != "sin categorias disponibles")){
+    else if((localStorage.getItem('categoria') != "Sin categoría") && (localStorage.getItem('categoria') != "sin categorias disponibles")){
     
       catAEnviar=localStorage.getItem('categoria');
-    }*/
+    }
     const datos = {concreteuser:this.state.usuario,concretepasswd:this.state.contrasenya, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:catAEnviar};
     const headers = {'Authorization':`Bearer ${value}`};
     await axios.post('https://fresh-techh.herokuapp.com/passwd',datos,{headers}
@@ -365,6 +367,10 @@ selectCategorias=async(value)=>{
       
       localStorage.removeItem('categoria');
 
+    })
+    .catch(error=>{
+      this.setState({existe:true});
+      console.log("error");
     })
   
   }
@@ -521,6 +527,10 @@ selectCategorias=async(value)=>{
       
       
     })
+    .catch(error=>{
+      this.setState({existe:true});
+      console.log("error");
+    })
  
   }
 
@@ -607,6 +617,8 @@ selectCategorias=async(value)=>{
       contrasenya_avanzado:'',
       longitud:'8',
       tipo:'',
+      existe:false,
+
     });
 
 
@@ -641,6 +653,8 @@ selectCategorias=async(value)=>{
       tipo:'',
       nombreAnterior:this.contraEdit.nombre,
       errorsC:{},
+      existe:false,
+
     });
     console.log("ANTES: ", this.contraEdit.nombre);
   }
@@ -665,6 +679,7 @@ selectCategorias=async(value)=>{
   handleChange = ({target}) => {
     const{name,value} = target
     this.setState({[name]:value})
+    this.setState({existe:false});
 
   }
 
@@ -790,6 +805,8 @@ selectCategorias=async(value)=>{
                   <i className="material-icons prefix">assignment</i>
                   <input className="field" ref={this.nombre} type="text" name="nombre"id="nombre" onChange={this.handleChange} placeholder="Nombre"/>
                   {errors.nombre && <p className="warning">{errors.nombre}</p>}
+                  {this.state.existe && <p className="warning">Existe contraseña con ese nombre</p>}
+
                 </div>
 
             
@@ -870,6 +887,8 @@ selectCategorias=async(value)=>{
                   <i className="material-icons prefix">assignment</i>
                   <input className="field" ref={this.nombre} type="text" name="nombre"id="nombre" onChange={this.handleChange} defaultValue={this.contraEdit.nombre} placeholder="Nombre"/>
                   {errors.nombre && <p className="warning">{errors.nombre}</p>}
+                  {this.state.existe && <p className="warning">Existe contraseña con ese nombre</p>}
+
                 </div>
 
              

@@ -41,6 +41,8 @@ class CuerpoCategorias extends React.Component {
       listadoCategorias:[],
       vacio:true,
       cargando:true,
+      existe:false,
+
    
     }
   
@@ -66,7 +68,10 @@ class CuerpoCategorias extends React.Component {
       this.togglePopup();
 
     })
-  
+    .catch(error=>{
+      this.setState({existe:true});
+      console.log(error.response);
+    })
   }
 
   //SELECCIONA CATEGORIAS EXISTENTES
@@ -118,6 +123,10 @@ class CuerpoCategorias extends React.Component {
       
       
     })
+    .catch(error=>{
+      this.setState({existe:true});
+      console.log(error.response);
+    })
   
   }
     ///////////////////////////////////////////////////////////
@@ -164,6 +173,8 @@ class CuerpoCategorias extends React.Component {
   handleChange = ({target}) => {
     const{name,value} = target
     this.setState({[name]:value})
+    this.setState({existe:false});
+
    
   }
 //FORMULARIOS SUBMIT
@@ -276,6 +287,8 @@ class CuerpoCategorias extends React.Component {
                       <i className="material-icons prefix circle">assignment</i>
                       <input type="text" name="categoria"id="categoria" onChange={this.handleChange} placeholder={"Introduzca una categoría nueva"}/>
                       {errors.categoria && <p className="warning">{errors.categoria}</p>}
+                      {this.state.existe && <p className="warning">Este nombre ya existe</p>}
+
                     </div>
                   
 
@@ -302,6 +315,8 @@ class CuerpoCategorias extends React.Component {
                       <i className="material-icons prefix circle">assignment</i>
                       <input type="text" name="categoria"id="categoria" onChange={this.handleChange} placeholder={"Introduzca una categoria"} defaultValue={this.catEdit.nombre}/>
                       {errors.categoria && <p className="warning">{errors.categoria}</p>}
+                      {this.state.existe && <p className="warning">Este nombre ya existe</p>}
+
                     </div>
                 <br/>
                 <input type='submit' class="btn waves-effect waves-light mr-5" value='Actualizar'/>

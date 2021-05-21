@@ -142,6 +142,8 @@ class CuerpoDocumentos extends React.Component {
       imgShow: '',
       imgUrl:'',
       fileCreate:'',
+      existe:false,
+
     }
     this.fileEdit={
       nombre:'',
@@ -196,6 +198,10 @@ class CuerpoDocumentos extends React.Component {
       console.log(response.data);
       this.setState({cargaContenido:true},() => this.togglePopup());
       localStorage.removeItem('categoria');
+    })
+    .catch(error=>{
+      this.setState({existe:true});
+      console.log("error");
     })
   }
 
@@ -398,8 +404,10 @@ class CuerpoDocumentos extends React.Component {
       
     })
     .catch(error=>{
+      this.setState({existe:true});
       console.log(error.response);
     })
+   
   }
   ///////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////
@@ -567,6 +575,8 @@ class CuerpoDocumentos extends React.Component {
   handleChange = ({target}) => {
     const{name,value} = target
     this.setState({[name]:value})
+    this.setState({existe:false});
+
    
   }
   //FORMULARIOS SUBMIT
@@ -695,6 +705,8 @@ class CuerpoDocumentos extends React.Component {
                   <i className="material-icons prefix">assignment</i>
                   <input type="text" name="nombreFile"id="nombreFile" onChange={this.handleChange} placeholder="Nombre"/>
                   {errors.nombreFile && <p className="warning">{errors.nombreFile}</p>}
+                  {this.state.existe && <p className="warning">Este nombre ya existe</p>}
+
                 </div>
              
                 <div className="input-field">
@@ -745,6 +757,8 @@ class CuerpoDocumentos extends React.Component {
                     <i className="material-icons prefix">assignment</i>
                     <input type="text" name="nombreFile"id="nombreFile" onChange={this.handleChange} placeholder="Nombre" defaultValue={this.fileEdit.nombre}/>
                     {errors.nombreFile && <p className="warning">{errors.nombreFile}</p>}
+                    {this.state.existe && <p className="warning">Este nombre ya existe</p>}
+
                   </div>
              
                   <div className="input-field">

@@ -143,6 +143,8 @@ class CuerpoImagenes extends React.Component {
       imgShow: '',
       imgUrl:'',
       imgCreate:'',
+      existe:false,
+
      
     }
     this.imgEdit={
@@ -202,6 +204,10 @@ class CuerpoImagenes extends React.Component {
       console.log(response.data);
       this.setState({cargaContenido:true},() => this.togglePopup());
       localStorage.removeItem('categoria');
+    })
+    .catch(error=>{
+      this.setState({existe:true});
+      console.log(error.response);
     })
   }
 
@@ -426,6 +432,7 @@ class CuerpoImagenes extends React.Component {
       
     })
     .catch(error=>{
+      this.setState({existe:true});
       console.log(error.response);
     })
   }
@@ -594,6 +601,8 @@ class CuerpoImagenes extends React.Component {
   handleChange = ({target}) => {
     const{name,value} = target
     this.setState({[name]:value})
+    this.setState({existe:false});
+
    
   }
 
@@ -728,6 +737,8 @@ class CuerpoImagenes extends React.Component {
                   <i className="material-icons prefix">assignment</i>
                   <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange} placeholder="Nombre"/>
                   {errors.nombreImg && <p className="warning">{errors.nombreImg}</p>}
+                  {this.state.existe && <p className="warning">Este nombre ya existe</p>}
+
                 </div>
              
                 <div className="input-field">
@@ -778,6 +789,8 @@ class CuerpoImagenes extends React.Component {
                     <i className="material-icons prefix">assignment</i>
                     <input type="text" name="nombreImg"id="nombreImg" onChange={this.handleChange} placeholder="Nombre" defaultValue={this.imgEdit.nombre}/>
                     {errors.nombreImg && <p className="warning">{errors.nombreImg}</p>}
+                    {this.state.existe && <p className="warning">Este nombre ya existe</p>}
+
                   </div>
              
                   <div className="input-field">

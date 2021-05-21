@@ -44,7 +44,7 @@ export default function SimpleMenu() {
   };
 
   const vaciarLocalMem=e=>{
-    localStorage.removeItem('categoria');
+    ///localStorage.removeItem('categoria');
     localStorage.removeItem('ordenarPor');
     localStorage.removeItem('ordenarDe');
   };

@@ -657,7 +657,7 @@ class CuerpoDocumentos extends React.Component {
             <div className="contenedorNombreFile">
               <p id={data.nombre} className="nombreItemFile">{data.nombre}</p>
             </div>
-              <p className="fechas">Fecha creación: {data.fechacreacion}<br></br>
+              <p className="fechasFile">Fecha creación: {data.fechacreacion}<br></br>
                   Fecha caducidad: {data.fechacaducidad}
               </p>
               <div className="botonesEditDel">

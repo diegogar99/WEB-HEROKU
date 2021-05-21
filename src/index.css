@@ -836,6 +836,10 @@ input::placeholder{
   margin-top: 0.5% !important;
   margin-left: 10% !important;
 }
+.fechasFile{
+  margin-top: 0.5% !important;
+  margin-right: 10% !important;
+}
 .fechasImg{
   margin-top: 2% !important;
   margin-left: 3% !important;
@@ -919,13 +923,14 @@ input::placeholder{
   overflow: scroll;
   text-overflow: ellipsis;
   max-width: 90px;
-  
+  min-width: 90px;
 }
 .contenedorNombreFile{
   white-space: nowrap;
   overflow: scroll;
   text-overflow: ellipsis;
   max-width: 100px;
+  min-width: 100px;
   
 }
 .contenedorNombreUserPasswd{
@@ -933,6 +938,7 @@ input::placeholder{
   overflow: scroll;
   text-overflow: ellipsis;
   max-width: 120px;
+  min-width: 120px;
   
 }
 

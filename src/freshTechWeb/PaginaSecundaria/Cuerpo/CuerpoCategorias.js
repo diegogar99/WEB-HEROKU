@@ -246,10 +246,12 @@ class CuerpoCategorias extends React.Component {
           <li key={data.nombrecat} class="collection-item avatar">
             <i class="material-icons circle blue">assignment</i>
             <div className="contenidoList">
-              <p id={data.nombre} className="nombreItem">{data.nombrecat}</p>
+              <div className="contenedorNombreCat">
+               <p id={data.nombre} className="nombreItem">{data.nombrecat}</p>
+              </div>
               <div className="botonDel">
-              <input className="btn botonDel btn-primary mr-5" name={data.nombrecat} id={data.nombrecat} type='button' value='Editar'  onClick={this.editar}/>
-              <input className="btn botonDel btn-primary" name={data.nombrecat} id={data.nombrecat} type='button' value='Eliminar' onClick={this.delete}/>
+                <input className="btn waves-effect waves-light mr-5" name={data.nombrecat} id={data.nombrecat} type='button' value='Editar'  onClick={this.editar}/>
+                <input className="btn waves-effect waves-light" name={data.nombrecat} id={data.nombrecat} type='button' value='Eliminar' onClick={this.delete}/>
                
               </div>
             </div>
@@ -265,7 +267,7 @@ class CuerpoCategorias extends React.Component {
 
       {this.state.showPopup ? 
           <Popup
-            text='Selecciona las imagenes:'
+            text='Crea una categoria:'
             cuerpo={
               <>
               <form className="pup" onSubmit={this.handleSubmit}>

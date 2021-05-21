@@ -941,7 +941,13 @@ input::placeholder{
   min-width: 120px;
   
 }
-
+.contenedorNombreCat{
+  white-space: nowrap;
+  overflow: scroll;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  min-width: 150px;
+}
 
 /*input[type=password]{
   width: 124% !important;

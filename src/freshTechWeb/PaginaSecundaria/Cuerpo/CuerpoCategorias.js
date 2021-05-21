@@ -267,7 +267,7 @@ class CuerpoCategorias extends React.Component {
 
       {this.state.showPopup ? 
           <Popup
-            text='Crea una categoria:'
+            text='Añade una categoria!'
             cuerpo={
               <>
               <form className="pup" onSubmit={this.handleSubmit}>
@@ -293,7 +293,7 @@ class CuerpoCategorias extends React.Component {
         }
         {this.state.showPopup2 ? 
           <Popup
-            text='Selecciona las imagenes:'
+            text='Actualiza la categoría:'
             cuerpo={
               <>
               <form className="pup" onSubmit={this.handleSubmitEdit}>

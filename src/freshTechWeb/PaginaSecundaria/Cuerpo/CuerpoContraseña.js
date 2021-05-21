@@ -774,7 +774,7 @@ selectCategorias=async(value)=>{
       
       {this.state.showPopup ? 
           <Popup
-            text='Usuario-contraseña:'
+            text='Añade una pareja usuario-passwdord!'
             cuerpo={
               <>
              

@@ -762,7 +762,7 @@ class CuerpoImagenes extends React.Component {
 
         {this.state.showPopup2 ? 
               <Popup
-                text='Edita la contraseña'
+                text='Edita la imagen'
                 cuerpo={
                   <>
                 <form onSubmit={this.handleSubmitEdit}>

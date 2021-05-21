@@ -57,20 +57,20 @@ export default function SimpleMenu() {
     <div>
     <Toolbar className="Toolbar">
 
-      <Link to="/paginaSecundaria">
+      <Link to="/paginaSecundaria" onClick={vaciarLocalMem}>
         <img className="logoEmpresa" src={logo} alt="Logo"/>
       </Link>
 
-      <Link to="/paginaSecundaria/seguridad">
+      <Link to="/paginaSecundaria/seguridad" onClick={vaciarLocalMem}>
         <Button>Seguridad</Button>
       </Link>
-      <Link to="/paginaSecundaria/contraseñas" className="contrasenyaLink">
+      <Link to="/paginaSecundaria/contraseñas" onClick={vaciarLocalMem} className="contrasenyaLink">
         <Button>Contraseñas</Button>
       </Link>
-      <Link to="/paginaSecundaria/documentos">
+      <Link to="/paginaSecundaria/documentos" onClick={vaciarLocalMem}>
         <Button>Documentos</Button>
       </Link>
-      <Link to="/paginaSecundaria/imagenes">
+      <Link to="/paginaSecundaria/imagenes" onClick={vaciarLocalMem}>
         <Button>Imagenes</Button>
       </Link>  
 
@@ -90,7 +90,7 @@ export default function SimpleMenu() {
         <Link to="/paginaSecundaria/" className="opt">
           <MenuItem onClick={handleClose}>Ver contraseñas caducadas</MenuItem>
         </Link>
-        <Link to="/" className="opt">
+        <Link to="/" className="opt" onClick={vaciarLocalMem}>
           <MenuItem onClick={handleClose}>Cerrar sesión</MenuItem>
         </Link>
       </Menu>

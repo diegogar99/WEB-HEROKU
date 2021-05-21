@@ -678,7 +678,7 @@ class CuerpoDocumentos extends React.Component {
        
     {this.state.showPopup ? 
           <Popup
-            text='Selecciona los ficheros:'
+            text='Añade un fichero!'
             cuerpo={
               <>
                <form  onSubmit={this.handleSubmit}>
@@ -729,7 +729,7 @@ class CuerpoDocumentos extends React.Component {
 
         {this.state.showPopup2 ? 
               <Popup
-                text='Edita la contraseña'
+                text='Edita el documento'
                 cuerpo={
                   <>
                 <form onSubmit={this.handleSubmitEdit}>

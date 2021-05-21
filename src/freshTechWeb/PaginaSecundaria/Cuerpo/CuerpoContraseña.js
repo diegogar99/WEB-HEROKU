@@ -343,7 +343,7 @@ selectCategorias=async(value)=>{
 
 //CREA USER-PASSWD
   crearContrasenya=async(value)=>{
-    var catAEnviar=null;
+    {/*var catAEnviar=null;
     if(localStorage.getItem('categoria') == null){
       if((this.miListaC.listaC[0] != "Sin categoría") && (this.miListaC.listaC[0] != "sin categorias disponibles")){
         catAEnviar = this.miListaC.listaC[0];
@@ -352,7 +352,7 @@ selectCategorias=async(value)=>{
     else if((localStorage.getItem('categoria') != "Sin categoría") && (localStorage.getItem('categoria') != "sin categorias disponibles")){
     
       catAEnviar=localStorage.getItem('categoria');
-    }
+    }*/}
     const datos = {concreteuser:this.state.usuario,concretepasswd:this.state.contrasenya, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:catAEnviar};
     const headers = {'Authorization':`Bearer ${value}`};
     await axios.post('https://fresh-techh.herokuapp.com/passwd',datos,{headers}
@@ -499,6 +499,7 @@ selectCategorias=async(value)=>{
     if(value1 == null){
       if((this.copiaLista.listaCopia[0] != "Sin categoría") && (this.copiaLista.listaCopia[0] != "sin categorias disponibles")){
         catAEnviar = this.copiaLista.listaCopia[0];
+	console.log("SEENNDDDDDD");
       }
     }
     else if((value1 != "Sin categoría") && (value1 != "sin categorias disponibles")){

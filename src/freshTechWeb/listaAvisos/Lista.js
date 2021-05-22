@@ -9,9 +9,15 @@ class Lista extends React.Component {
         this.vacio=false;
     }
     render () {
+        console.log("PILLA: ",this.listaCaducados);
+        console.log("MANDAMOS: ",this.props.caducados);
         if(this.listaCaducados.length == 0){
+          console.log("NO DEBERIA");
           this.vacio = true;
+        }else{
+          this.vacio = false;
         }
+        console.log("VACIO: ",this.vacio );
         return (
           <>
           
@@ -45,10 +51,15 @@ class Lista extends React.Component {
                   </>
 
                 }
-                  <span class="title">{data.nombre}</span>
-                  <p>{data.fechacreacion}<br></br>
-                  {data.fechacaducidad}
+                <div className="contenidoList">
+                  <div className="contenedorNombreUserPasswd">
+                    <p id={data.nombre} className="nombreItem">{data.nombre}</p>
+                  </div>
+                  <p className="fechas">Fecha creación: {data.fechacreacion}<br></br>
+                    Fecha caducidad: {data.fechacaducidad}
                   </p>
+                </div>
+                
 
                 </div>
                 </li>
@@ -57,40 +68,7 @@ class Lista extends React.Component {
 
               </>
             }
-         
-
-            {/*<li class="collection-item avatar">
-              <div>
-                <i class="material-icons circle red">picture_as_pdf</i>
-                  <span class="title">Title</span>
-                  <p>First Line <br></br>
-                    Second Line
-                  </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
-              </div>
-            </li>
-            <li class="collection-item avatar">
-            <div>
-                <i class="material-icons circle blue">lock_open</i>
-                <span class="title">Title</span>
-                <p>First Line <br></br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
-              </div>
-            </li>
-            <li class="collection-item avatar">
-            <div>
-                <i class="material-icons circle green">image</i>
-                <span class="title">Title</span>
-                <p>First Line <br></br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
-              </div>
-              </li>*/}
-
-           
+          
           </ul>
 
     

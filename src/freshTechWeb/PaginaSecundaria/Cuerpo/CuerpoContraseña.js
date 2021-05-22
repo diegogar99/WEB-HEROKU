@@ -925,7 +925,7 @@ selectCategorias=async(value)=>{
                   <div className="input-field">
                         
                     <i className="material-icons prefix">lock</i>
-                    <input ref={this.passwd} className="field" type='text' name = "contrasenyaEdit"id="contrasenyaEdit" onChange={this.handleChange} value={avanzado ? this.state.contrasenyaEdit:undefined}  defaultValue={this.contraEdit.contrasenya}/>  
+                    <input ref={this.passwd} className="field" type='text' name = "contrasenyaEdit"id="contrasenyaEdit" onChange={this.handleChange} value={avanzado ? this.state.contrasenyaEdit:this.contraEdit.contrasenya}  defaultValue={this.contraEdit.contrasenya}/>  
                     <button type="button" className="btn-floating blue prefix" onClick={this.togglePopup4.bind(this)}>
                       <i className="material-icons circle">edit</i>
                     </button>

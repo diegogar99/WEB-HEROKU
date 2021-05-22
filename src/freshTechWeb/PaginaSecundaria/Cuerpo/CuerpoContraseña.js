@@ -84,10 +84,41 @@ const validate = values =>{
     errors.contrasenya = 'Introduzca una contraseña'
   }
  
+
+
   return errors
 
 }
+const validateEdit = values =>{
+  const errors = {}
 
+  if (!values.fecha_actual){
+    errors.fecha_actual = 'Introduzca fecha válida'
+  }
+  if (!values.fecha_caducidad || !/[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]/.test(values.fecha_caducidad)||!compararFechas(values.fecha_actual,values.fecha_caducidad) ||!verificarFecha(values.fecha_caducidad)){
+    errors.fecha_caducidad = 'Introduzca fecha válida'
+  }
+  
+  if (!values.nombre){
+    errors.nombre = 'Introduzca nombre válido'
+  }
+  if (!values.url){
+    errors.url = 'Introduzca url válida'
+  }
+  if (!values.usuario){
+    errors.usuario = 'Introduzca usuario válido'
+  }
+  if (!values.contrasenya){
+    errors.contrasenya = 'Introduzca una contraseña'
+  }
+ 
+  if(values.contrasenya && !values.contrasenyaEdit && values.actualizaPasswd){
+    errors.contrasenyaEdit = 'Introduzca una contraseña'
+  }
+
+  return errors
+
+}
 function fecha(){
   var actual= new Date();
 
@@ -170,6 +201,7 @@ class CuerpoContraseña extends React.Component {
       nombreAnterior:'',
       cargando:true,
       existe:false,
+      actualizaPasswd:false,
 
      
       
@@ -437,7 +469,7 @@ selectCategorias=async(value)=>{
     .then(response =>{
      
      
-      
+      console.log("Supuesta passwd: ", response.data.concretpasswd);
       this.contraEdit.usuario=response.data.concreteuser;
       this.contraEdit.activacion=response.data.fechacreacion;
       this.contraEdit.caducidad=response.data.fechacaducidad;
@@ -499,10 +531,21 @@ selectCategorias=async(value)=>{
     console.log("Nombre: ", this.state.nombre);
     console.log("Usuario: ", this.state.usuario);
     console.log("Contrasenya: ", this.state.contrasenya);
+    console.log("ContrasenyaNueva: ", this.state.contrasenyaEdit);
     console.log("URL: ", this.state.url);
     console.log("Contrasenya: ", value1);
     console.log("URL: ", this.state.fecha_caducidad);
-    
+    var contraActualizada = "";
+    if(this.state.contrasenyaEdit == ""){
+      contraActualizada = this.state.contrasenya;
+    }else{
+      if(this.state.actualizaPasswd){
+        contraActualizada = this.state.contrasenyaEdit;
+      }else{
+        contraActualizada = this.state.contrasenya;
+      }
+     
+    }
     var catAEnviar=null;
     if(value1 == null){
       if((this.copiaLista.listaCopia[0] != "Sin categoría") && (this.copiaLista.listaCopia[0] != "sin categorias disponibles")){
@@ -516,7 +559,7 @@ selectCategorias=async(value)=>{
     }
 
     
-    const datos = {nombrePassword:this.state.nombreAnterior,concreteuser:this.state.usuario,concretepasswd:this.state.contrasenyaEdit, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:catAEnviar};
+    const datos = {nombrePassword:this.state.nombreAnterior,concreteuser:this.state.usuario,concretepasswd:contraActualizada, dominio:this.state.url,fechacreacion:this.state.fecha_actual,fechacaducidad:this.state.fecha_caducidad,nombre:this.state.nombre,categoria:catAEnviar};
     const headers = {'Authorization':`Bearer ${value2}`};
     await axios.post('https://fresh-techh.herokuapp.com/editpasswd',datos,{headers}
     )
@@ -682,6 +725,13 @@ selectCategorias=async(value)=>{
     this.setState({existe:false});
 
   }
+  //HANDLE CHANGE ACTUALIZAR PASSWD
+  handleChangeUploadPasswd = ({target}) => {
+    const{name,value} = target
+    this.setState({[name]:value})
+    this.setState({actualizaPasswd:true});
+
+  }
 
  //FORMULARIOS SUBMIT
 
@@ -705,9 +755,23 @@ selectCategorias=async(value)=>{
   }
 
   handleSubmitEdit =e => {
-    e.preventDefault()    
-    var cat = localStorage.getItem('categoria');
-    this.actualizarContrasenya(cat,this.state.token);
+ 
+   
+    e.preventDefault()
+    //Así separo errors del resto de estado
+    const {errors, ...sinErrors} = this.state
+    const result = validateEdit(sinErrors)
+    this.setState({errors:result})
+  
+    if(!Object.keys(result).length){ //Si tiene propiedades, hay error
+      //Envio formulario
+      var cat = localStorage.getItem('categoria');
+      this.actualizarContrasenya(cat,this.state.token);
+
+    }else{
+
+      console.log('Formulario inválido')
+    }
   }
 
 
@@ -925,7 +989,7 @@ selectCategorias=async(value)=>{
                   <div className="input-field">
                         
                     <i className="material-icons prefix">lock</i>
-                    <input ref={this.passwd} className="field" type='text' name = "contrasenyaEdit"id="contrasenyaEdit" onChange={this.handleChange} value={avanzado ? this.state.contrasenyaEdit:this.contraEdit.contrasenya}  defaultValue={this.contraEdit.contrasenya}/>  
+                    <input ref={this.passwd} className="field" type='text' name = "contrasenyaEdit"id="contrasenyaEdit" onChange={this.handleChangeUploadPasswd} value={avanzado ? this.state.contrasenyaEdit:undefined}  defaultValue={this.contraEdit.contrasenya}/>  
                     <button type="button" className="btn-floating blue prefix" onClick={this.togglePopup4.bind(this)}>
                       <i className="material-icons circle">edit</i>
                     </button>

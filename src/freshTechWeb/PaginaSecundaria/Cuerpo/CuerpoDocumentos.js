@@ -195,9 +195,16 @@ class CuerpoDocumentos extends React.Component {
     await axios.post('https://fresh-techh.herokuapp.com/addFile',value2,{headers}
     )
     .then(response =>{
-      console.log(response.data);
-      this.setState({cargaContenido:true},() => this.togglePopup());
-      localStorage.removeItem('categoria');
+      console.log("RESP:", response.data);
+      if(response.data == "ok"){
+        this.setState({cargaContenido:true},() => this.togglePopup());
+        localStorage.removeItem('categoria');
+      }else{
+        this.setState({existe:true});
+        console.log("error");
+      }
+      
+      
     })
     .catch(error=>{
       this.setState({existe:true});
@@ -599,6 +606,7 @@ class CuerpoDocumentos extends React.Component {
     e.preventDefault()    
 
     var cat = localStorage.getItem('categoria');
+    console.log(cat);
     this.actualizar(cat);
   }
 

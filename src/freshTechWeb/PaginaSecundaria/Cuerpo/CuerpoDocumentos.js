@@ -83,6 +83,19 @@ const validate = values =>{
   return errors
 }
 
+const validateEdit = values =>{
+  const errors = {}
+
+  if (!values.nombreFile){
+    errors.nombreFile = 'Introduzca nombre válido'
+  }
+  if (!values.expiracionFile || !/[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]/.test(values.expiracionFile)||!compararFechas(values.creacionImg,values.expiracionFile) || !verificarFecha(values.expiracionFile)){
+    errors.expiracionFile = 'Introduzca fecha válida'
+  }
+  
+  return errors
+}
+
 function compararFechas(fecha1,fecha2){
 
   var fechaAct = Number(fecha1.split("-").reverse().join("-").replace(/-/g,""));
@@ -196,15 +209,13 @@ class CuerpoDocumentos extends React.Component {
     )
     .then(response =>{
       console.log("RESP:", response.data);
-      if(response.data == "ok"){
+      if(response.data.message == "ok"){
         this.setState({cargaContenido:true},() => this.togglePopup());
         localStorage.removeItem('categoria');
       }else{
         this.setState({existe:true});
         console.log("error");
       }
-      
-      
     })
     .catch(error=>{
       this.setState({existe:true});
@@ -404,10 +415,14 @@ class CuerpoDocumentos extends React.Component {
     await axios.post('https://fresh-techh.herokuapp.com/editFile',value2,{headers},
     )
     .then(response =>{
-      console.log("ACTUALIZO: ", response.data);
-      this.setState({cargaContenido:true},() => this.togglePopup2());
-      localStorage.removeItem('categoria');
-      //window.location.reload();
+      console.log("RESP:", response.data);
+      if(response.data.message == "ok"){
+        this.setState({cargaContenido:true},() => this.togglePopup2());
+        localStorage.removeItem('categoria');
+      }else{
+        this.setState({existe:true});
+        console.log("error");
+      }
       
     })
     .catch(error=>{
@@ -547,6 +562,7 @@ class CuerpoDocumentos extends React.Component {
     this.setState({
       showPopup: !this.state.showPopup,
       errors:{},
+      existe:false,
     });
     let array = this.state.listadoCategorias;
     if(array.length > 0){
@@ -561,6 +577,7 @@ class CuerpoDocumentos extends React.Component {
       nombreAnterior:this.fileEdit.nombre,
       expiracionFile:this.fileEdit.caducidad,
       nombreFile:this.fileEdit.nombre,
+      existe:false,
   
     });
 
@@ -582,7 +599,7 @@ class CuerpoDocumentos extends React.Component {
   handleChange = ({target}) => {
     const{name,value} = target
     this.setState({[name]:value})
-    this.setState({existe:false});
+    this.setState({existe:false,errors:{}});
 
    
   }
@@ -603,11 +620,25 @@ class CuerpoDocumentos extends React.Component {
     }
   }
   handleSubmitEdit =e => {
-    e.preventDefault()    
+    /*e.preventDefault()    
 
     var cat = localStorage.getItem('categoria');
     console.log(cat);
-    this.actualizar(cat);
+    this.actualizar(cat);*/
+    e.preventDefault()
+    const {errors, ...sinErrors} = this.state
+    const result = validateEdit(sinErrors)
+    this.setState({errors:result})
+    console.log("FAALAA ",result);
+    if(!Object.keys(result).length){ //Si tiene propiedades, hay error
+      //Envio formulario
+      var cat = localStorage.getItem('categoria');
+      console.log(cat);
+      this.actualizar(cat);
+    }else{
+
+      console.log('Formulario inválido')
+    }
   }
 
   ///////////////////////////////////////////////////////////

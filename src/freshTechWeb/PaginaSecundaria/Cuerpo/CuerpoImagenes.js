@@ -83,7 +83,18 @@ const validate = values =>{
   }
   return errors
 }
+const validateEdit = values =>{
+  const errors = {}
 
+  if (!values.nombreImg){
+    errors.nombreImg = 'Introduzca nombre válido'
+  }
+  if (!values.expiracionImg || !/[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]/.test(values.expiracionImg)||!compararFechas(values.creacionImg,values.expiracionImg) || !verificarFecha(values.expiracionImg)){
+    errors.expiracionImg = 'Introduzca fecha válida'
+  }
+ 
+  return errors
+}
 function compararFechas(fecha1,fecha2){
 
   var fechaAct = Number(fecha1.split("-").reverse().join("-").replace(/-/g,""));
@@ -201,9 +212,15 @@ class CuerpoImagenes extends React.Component {
     await axios.post('https://fresh-techh.herokuapp.com/addPic',value2,{headers}
     )
     .then(response =>{
-      console.log(response.data);
-      this.setState({cargaContenido:true},() => this.togglePopup());
-      localStorage.removeItem('categoria');
+      console.log("RESP:", response.data);
+      if(response.data.message == "ok"){
+        this.setState({cargaContenido:true},() => this.togglePopup());
+        localStorage.removeItem('categoria');
+      }else{
+        this.setState({existe:true});
+        console.log("error");
+      }
+     
     })
     .catch(error=>{
       this.setState({existe:true});
@@ -425,10 +442,15 @@ class CuerpoImagenes extends React.Component {
     await axios.post('https://fresh-techh.herokuapp.com/editPic',value2,{headers},
     )
     .then(response =>{
-      console.log("ACTUALIZO: ", response.data);
-      this.setState({cargaContenido:true},() => this.togglePopup2());
-      localStorage.removeItem('categoria');
-      window.location.reload();
+      console.log("RESP:", response.data);
+      if(response.data.message == "ok"){
+        this.setState({cargaContenido:true},() => this.togglePopup2());
+        localStorage.removeItem('categoria');
+       // window.location.reload();
+      }else{
+        this.setState({existe:true});
+        console.log("error");
+      }
       
     })
     .catch(error=>{
@@ -564,7 +586,9 @@ class CuerpoImagenes extends React.Component {
 
   togglePopup() {
     this.setState({
-      showPopup: !this.state.showPopup
+      showPopup: !this.state.showPopup,
+      errors:{},
+      existe:false,
     });
     let array = this.state.listadoCategorias;
     if(array.length > 0){
@@ -579,7 +603,7 @@ class CuerpoImagenes extends React.Component {
       nombreAnterior:this.imgEdit.nombre,
       expiracionImg:this.imgEdit.caducidad,
       nombreImg:this.imgEdit.nombre,
-  
+      existe:false,
     });
    
     
@@ -601,7 +625,7 @@ class CuerpoImagenes extends React.Component {
   handleChange = ({target}) => {
     const{name,value} = target
     this.setState({[name]:value})
-    this.setState({existe:false});
+    this.setState({existe:false,errors:{}});
 
    
   }
@@ -624,10 +648,20 @@ class CuerpoImagenes extends React.Component {
     }
   }
   handleSubmitEdit =e => {
-    e.preventDefault()    
+     
+    e.preventDefault()
+    const {errors, ...sinErrors} = this.state
+    const result = validateEdit(sinErrors)
+    this.setState({errors:result})
+  
+    if(!Object.keys(result).length){ //Si tiene propiedades, hay error
+      //Envio formulario
+      var cat = localStorage.getItem('categoria');
+      this.actualizar(cat);
+    }else{
 
-    var cat = localStorage.getItem('categoria');
-    this.actualizar(cat);
+      console.log('Formulario inválido')
+    }
     
   }
 

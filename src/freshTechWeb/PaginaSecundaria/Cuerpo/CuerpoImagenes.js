@@ -173,7 +173,7 @@ class CuerpoImagenes extends React.Component {
     this.data = new FormData();
     this.dataImgEdit = new FormData();
     this.miListaV={
-      listaV:["Nombre","Fecha de creación", "Fecha de caducidad"]
+      listaV:["Nombre","Fecha de creación", "Fecha de caducidad", "Categoria"]
     }
   }
 
@@ -262,6 +262,8 @@ class CuerpoImagenes extends React.Component {
     console.log("Ordenar por I: ",this.state.ordenarPor);
     if(this.state.ordenarPor == "Nombre"){
       orden = "nombre";
+    }else if(this.state.ordenarPor == "Categoria"){
+        orden = "categoria";
     }else if(this.state.ordenarPor == "Fecha de creación"){
       orden = "fechacreacion";
     }else if(this.state.ordenarPor == "undefined"){

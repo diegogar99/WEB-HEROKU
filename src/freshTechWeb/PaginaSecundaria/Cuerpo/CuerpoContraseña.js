@@ -231,7 +231,7 @@ class CuerpoContraseña extends React.Component {
 
   //LISTA ORDENAR
   miListaV={
-    listaV:["Nombre","Fecha de creación", "Fecha de caducidad"]
+    listaV:["Nombre","Fecha de creación", "Fecha de caducidad", "Categoria"]
   }
   //LISTA CATEGORIAS
   miListaC={
@@ -417,6 +417,8 @@ selectCategorias=async(value)=>{
     console.log("Ordenar de: ",this.state.ordenarDe);
     if(this.state.ordenarPor == "Nombre"){
       orden = "nombre";
+    }else if(this.state.ordenarPor == "Categoria"){
+        orden = "categoria";
     }else if(this.state.ordenarPor == "Fecha de creación"){
       orden = "fechacreacion";
     }else if(this.state.ordenarPor == "undefined"){

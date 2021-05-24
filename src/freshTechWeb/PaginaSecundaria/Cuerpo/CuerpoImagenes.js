@@ -217,7 +217,7 @@ class CuerpoImagenes extends React.Component {
         this.setState({cargaContenido:true},() => this.togglePopup());
         localStorage.removeItem('categoria');
       }else{
-        this.setState({existe:true});
+        this.setState({existe:true,imgCreate:''});
         console.log("error");
       }
      
@@ -448,7 +448,7 @@ class CuerpoImagenes extends React.Component {
       if(response.data.message == "ok"){
         this.setState({cargaContenido:true},() => this.togglePopup2());
         localStorage.removeItem('categoria');
-       // window.location.reload();
+        window.location.reload();
       }else{
         this.setState({existe:true});
         console.log("error");

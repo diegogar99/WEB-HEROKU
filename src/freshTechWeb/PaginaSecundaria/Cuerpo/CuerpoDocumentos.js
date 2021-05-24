@@ -213,7 +213,7 @@ class CuerpoDocumentos extends React.Component {
         this.setState({cargaContenido:true},() => this.togglePopup());
         localStorage.removeItem('categoria');
       }else{
-        this.setState({existe:true});
+        this.setState({existe:true,fileCreate:''});
         console.log("error");
       }
     })
